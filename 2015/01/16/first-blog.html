@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>第一篇博客 - BradyPod's Blog</title>
+  <meta name="description" content="89后，工作在广州；Java程序员。">
+  <meta name="keywords" content="java, linux, shell, nginx, lua, mysql, memcached, redis">
+  <meta name="author" content="bradypod">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="360-site-verification" content="9b7a87a1d52051c96644f0a9b8b79898" />
+  <meta name="sogou_site_verification" content="ofwXWFdthV"/>
+
+  <link href="favicon.ico" type="image/ico" rel="icon">
+  <link href="favicon.ico" type="image/ico" rel="shortcut icon">
+
+  <link rel="canonical" href="http://blog.bradypod.com/">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css" media="all">
+  <link rel="stylesheet" href="/static/css/font-awesome.min.css" media="all">
+  <link rel="stylesheet" href="/static/css/style.css" media="all">
+  <link rel="stylesheet" href="/static/css/prettify.css" media="all">
+
+</head>
+
+<body>
+  <div class="container">
+
+    <header class="header">
+      <div class="title"><a title="bradypod's blog" href="/">BradyPod's blog</a></div>
+      <ul class="nav navbar-nav navbar-right visible-lg visible-md">
+        <li>
+          <form id="search-form" class="form-group has-success visible-lg" role="form">
+            <input type="text" class="form-control input-sm" placeholder="Search" id="query" style="width: 110px;">
+          </form>
+        </li>
+        <li><a href="https://github.com/JumperYu" title="Categories"><i class="icon-github"></i> github</a></li>
+        <li><a href="http://weibo.com/javaserverfaces/home?wvr=5" title="Tags"><i class="icon-pinterest-sign"></i> weibo</a></li>
+        <li><a href="index.html" title="About"><i class="icon-phone"></i> telphone</a></li>
+      </ul>
+    </header>
+
+    <div class="wrapper">
+      <div class="row">
+        <div class="col-md-12">
+          <article class="news-item">
+              <h2><a href="2015/01/16/first-blog.html">第一篇博客 - Start Nginx</a><small>  2015.01.16</small></h2>
+
+                这是第一篇文章，就从我最着迷的Nginx开启吧。
+                <div>
+                  <p>Nginx ("engine x") 是一个高性能的 HTTP 和 反向代理 服务器，也是一个 IMAP/POP3/SMTP 代理服务器。 Nginx 是由 Igor Sysoev 为俄罗斯访问量第二的 Rambler.ru 站点开发的，第一个公开版本0.1.0发布于2004年10月4日。其将源代码以类BSD许可证的形式发布，因它的稳定性、丰富的功能集、示例配置文件和低系统资源的消耗而闻名。2011年6月1日，nginx 1.0.4发布。
+                  <<<a href="http://baike.baidu.com/link?url=B-y6uuN3j8dtbUc22KjKbXrIzQ_led_I4QhVJfW15KLHs9rM2Dm1Bf9NRH8zKHX6J_3cX2SmgWYuZliHR_KLE_" title="懒人链接">来自百度词条</a>>></p>
+                  <h3>Start Nginx - Install</h3>
+                  <p>学习Nginx前最好具备以下几种有点：</p>
+                  <ul>
+                    <li>折腾，喜欢折腾， 不停地折腾；</li>
+                    <li>折腾Linux，喜欢折腾Linux， 不停地折腾Linux；</li>
+                    <li>具备web开发的基础，如php、java等；</li>
+                    <li>追求轻量级，追求高性能；</li>
+                    <li>最好准备一台自己的折腾云主机，首推CentOS操作系统， 谁用谁知道！</li>
+                  </ul>
+                  <p>开始折腾：</p>
+                  <ul>
+                    <li><a href="http://nginx.org/" title="懒人链接">直奔官网</a>，随意看看，下载一个stable版本的tar包；</li>
+                    <li>nginx的安装存在一些依赖，所以直接下载tar包是没用的；（LOL）</li>
+                    <li>我比较推荐进行源码安装，如果在centos还可以使用yum一键安装；（<a href="#">后续</a>）</li>
+                    <li>一大堆废话后， 开始我们的源码安装，推荐使用wget命令下载，或者在windows上下载好，再上传上来。</li>
+                  </ul>
+                  <div class="highlight">
+                    <pre class="prettyprint linenums prettyprinted" style="">
+                      <ol class="linenums">
+                        <li class="L0"><span class="dec">&lt;!DOCTYPE html&gt;</span></li>
+                        <li class="L1"><span class="tag">&lt;html</span><span class="pln"> </span><span class="atn">lang</span><span class="pun">=</span><span class="atv">"en"</span><span class="tag">&gt;</span>
+                        </li>
+                        <li class="L2"><span class="pln">  ...</span></li>
+                        <li class="L3"><span class="tag">&lt;/html&gt;</span></li>
+                      </ol>
+                    </pre>
+                  </div>
+                  <p>表格</p>
+                               <table><thead>
+                <tr>
+                <th style="text-align: left">字段名</th>
+                <th style="text-align: left">参数</th>
+                <th style="text-align: left">意义</th>
+                </tr>
+                </thead><tbody>
+                <tr>
+                <td style="text-align: left">AutoField</td>
+                <td style="text-align: left"></td>
+                <td style="text-align: left">一个能够根据可用ID自增的 IntegerField</td>
+                </tr>
+                <tr>
+                <td style="text-align: left">BooleanField</td>
+                <td style="text-align: left"></td>
+                <td style="text-align: left">一个真/假字段</td>
+                </tr>
+                <tr>
+                <td style="text-align: left">CharField</td>
+                <td style="text-align: left">(max_length)</td>
+                <td style="text-align: left">适用于中小长度的字符串。对于长段的文字，请使用 TextField</td>
+                </tr>
+                <tr>
+                <td style="text-align: left">CommaSeparatedIntegerField</td>
+                <td style="text-align: left">(max_length)</td>
+                <td style="text-align: left">一个用逗号分隔开的整数字段</td>
+                </tr>
+                <tr>
+                <td style="text-align: left">DateField</td>
+                <td style="text-align: left">([auto_now], [auto_now_add])</td>
+                <td style="text-align: left">日期字段</td>
+                </tr>
+                <tr>
+                <td style="text-align: left">DateTimeField</td>
+                <td style="text-align: left"></td>
+                <td style="text-align: left">时间日期字段,接受跟 DateField 一样的额外选项</td>
+                </tr>
+                <tr>
+                <td style="text-align: left">EmailField</td>
+                <td style="text-align: left"></td>
+                <td style="text-align: left">一个能检查值是否是有效的电子邮件地址的 CharField</td>
+                </tr>
+                </tbody>
+              </table>
+                </div>
+            </article>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+
+    <div class="well well-large well-transparent lead">
+      <i class="icon-spinner icon-spin icon-2x pull-left"> </i>
+      尽请期待...
+    </div>
+
+    <footer class="footer text-center">
+      <p>&copy; 2014-2016 <a href="/" target="_blank" title="89后，工作在广州；Java程序员">bradypod's blog</a>.
+
+      <span style="float:right;"><a href="about.html">关于</a></span>
+  
+      <script type="text/javascript">
+        // 站长统计
+        var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+        document.write(unescape("%3Cspan id='cnzz_stat_icon_1253501761'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1253501761' type='text/javascript'%3E%3C/script%3E"));
+      </script>
+      </p>
+
+      <div style="display: block;" id="toTop">
+        <a href="#" title="火箭"><i class="icon-arrow-up"></i></a><a href="#footer" title="火箭"><i class="icon-arrow-down"></i></a>
+      </div>
+    </footer>
+
+  </div>
+  <script src="/static/js/jquery.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/core.js"></script>
+</body>
+
+</html>
