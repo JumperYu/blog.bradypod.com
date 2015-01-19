@@ -19,8 +19,9 @@
   <link rel="stylesheet" href="/static/css/bootstrap.min.css" media="all">
   <link rel="stylesheet" href="/static/css/font-awesome.min.css" media="all">
   <link rel="stylesheet" href="/static/css/style.css" media="all">
- <!--  <link rel="stylesheet" href="/static/css/prettify.css" media="all"> -->
-  <link rel="stylesheet" href="/static/css/sons-of-obsidian.css" media="all">
+  <!-- <link rel="stylesheet" href="/static/css/prettify.css" media="all"> -->
+  <!-- <link rel="stylesheet" href="/static/css/sons-of-obsidian.css" media="all"> -->
+  <link rel="stylesheet" href="/static/css/desert.css" media="all">
 
 </head>
 
@@ -28,7 +29,7 @@
   <div class="container">
 
     <header class="header">
-      <div class="title"><a title="bradypod's blog" href="/">BradyPod's blog</a></div>
+      <div class="title"><a title="bradypod's blog" href="#">BradyPod's blog</a></div>
       <ul class="nav navbar-nav navbar-right visible-lg visible-md">
         <li>
           <form id="search-form" class="form-group has-success visible-lg" role="form">
@@ -45,7 +46,7 @@
       <div class="row">
         <div class="col-md-12">
           <article class="news-item">
-              <h2><a href="2015/01/16/first-blog.html">第一篇博客 - Start Nginx</a><small>  2015.01.16</small></h2>
+              <h2><a href="#">第一篇博客 - Start Nginx</a><small>  2015.01.16</small></h2>
 
                 这是第一篇文章，就从我最着迷的Nginx开启吧。
                 <div>
@@ -67,66 +68,87 @@
                     <li>我比较推荐进行源码安装，如果在centos还可以使用yum一键安装；（<a href="#">后续</a>）</li>
                     <li>一大堆废话后， 开始我们的源码安装，推荐使用wget命令下载，或者在windows上下载好，再上传上来。</li>
                   </ul>
-                  <div class="">
-                    <pre class="prettyprint lang-java linenums">
-                    class A {
-                      int a;
-                      String abc;
-                      public static find(){}
-                    }
-                    </pre>
-                  </div>
-                  <p>表格</p>
-                               <table><thead>
+<div class="">
+<pre class="prettyprint lang-shell linenums">
+### 安装PCRE库
+cd /usr/local/src 
+wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.34.tar.gz 
+tar -zxvf pcre-8.34.tar.gz 
+cd pcre-8.34 
+./configure 
+make && make instal 
+
+### 安装zlib库 
+cd /usr/local/src 
+wget http://zlib.net/zlib-1.2.8.tar.gz 
+tar -zxvf zlib-1.2.8.tar.gz 
+cd zlib-1.2.8 
+./configure 
+make && make instal
+
+### 下载ssl，解压即可（某些vps默认没装ssl) 
+
+cd /usr/local/src 
+wget http://www.openssl.org/source/openssl-1.0.1c.tar.gz 
+tar -zxvf openssl-1.0.1c.tar.gz
+
+### 安装nginx 官网选择版本,修改xxx为版本号
+cd /usr/local/src 
+wget http://nginx.org/download/nginx-xxx.tar.gz 
+tar -zxvf nginx-xxx.tar.gz 
+cd nginx-xxx/
+./configure --sbin-path=/usr/local/nginx/nginx \
+--conf-path=/usr/local/nginx/nginx.conf \
+--pid-path=/usr/local/nginx/nginx.pid \
+--with-http_ssl_module \
+--with-pcre=/usr/local/src/pcre-8.34 \
+--with-zlib=/usr/local/src/zlib-1.2.8 \
+--with-openssl=/usr/local/src/openssl-1.0.1c
+make && make install
+
+### 启动nginx
+netstat -ano|grep 80
+### 检查不被占用， 则执行
+/usr/local/nginx/nginx
+
+### 测试访问
+curl -i http://localhost
+
+PS: 以上编译安装依赖于gcc、make，如果没有安装
+centos下可以执行
+yum -y install gcc automake autoconf libtool make
+yum -y install gcc gcc-c++
+</pre>
+</div>
+                <p>相关描述</p>
+                <table><thead>
                 <tr>
-                <th style="text-align: left">字段名</th>
+                <th style="text-align: left">名称</th>
                 <th style="text-align: left">参数</th>
                 <th style="text-align: left">意义</th>
                 </tr>
                 </thead><tbody>
                 <tr>
-                <td style="text-align: left">AutoField</td>
-                <td style="text-align: left"></td>
-                <td style="text-align: left">一个能够根据可用ID自增的 IntegerField</td>
+                <td style="text-align: left">nginx</td>
+                <td style="text-align: left">(空) 、-t、-s [reload|restart|stop]</td>
+                <td style="text-align: left">启动、 测试、 [重新加载|重启动|停止]</td>
                 </tr>
                 <tr>
-                <td style="text-align: left">BooleanField</td>
-                <td style="text-align: left"></td>
-                <td style="text-align: left">一个真/假字段</td>
+                <td style="text-align: left">nginx.conf</td>
+                <td style="text-align: left">(空)</td>
+                <td style="text-align: left">配置文件</td>
                 </tr>
                 <tr>
-                <td style="text-align: left">CharField</td>
-                <td style="text-align: left">(max_length)</td>
-                <td style="text-align: left">适用于中小长度的字符串。对于长段的文字，请使用 TextField</td>
+                <td style="text-align: left">logs - [access.log|error.log]</td>
+                <td style="text-align: left">(空)</td>
+                <td style="text-align: left">日志 - [访问日志|错误日志]</td>
                 </tr>
-                <tr>
-                <td style="text-align: left">CommaSeparatedIntegerField</td>
-                <td style="text-align: left">(max_length)</td>
-                <td style="text-align: left">一个用逗号分隔开的整数字段</td>
-                </tr>
-                <tr>
-                <td style="text-align: left">DateField</td>
-                <td style="text-align: left">([auto_now], [auto_now_add])</td>
-                <td style="text-align: left">日期字段</td>
-                </tr>
-                <tr>
-                <td style="text-align: left">DateTimeField</td>
-                <td style="text-align: left"></td>
-                <td style="text-align: left">时间日期字段,接受跟 DateField 一样的额外选项</td>
-                </tr>
-                <tr>
-                <td style="text-align: left">EmailField</td>
-                <td style="text-align: left"></td>
-                <td style="text-align: left">一个能检查值是否是有效的电子邮件地址的 CharField</td>
-                </tr>
-                </tbody>
-              </table>
-                </div>
+                </tbody></table>
             </article>
-        </div>
+        </div><!-- end div col-md-12-->
         <div class="clearfix"></div>
-      </div>
-    </div>
+      </div><!-- end div row -->
+    </div><!-- end div wrapper -->
 
     <div class="well well-large well-transparent lead">
       <i class="icon-spinner icon-spin icon-2x pull-left"> </i>
@@ -150,7 +172,7 @@
       </div>
     </footer>
 
-  </div>
+  </div><!-- end div container -->
   <script src="/static/js/jquery.min.js"></script>
   <script src="/static/js/bootstrap.min.js"></script>
   <script src="/static/js/prettify.js"></script>
