@@ -1,6 +1,4 @@
 User-agent:*
 Disallow:/404.html
-Disallow:/static/*
-Allow: /2015/*/*
-Allow: /2015/01/*
-Allow: /2015/02/*
+Disallow:/static/
+Allow: /
