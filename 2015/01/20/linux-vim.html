@@ -73,23 +73,1028 @@ third line
                 <th style="text-align: left">功能</th>
                 <th style="text-align: left">按键</th>
                 <th style="text-align: left">说明</th>
+                <th style="text-align: left">参考</th>
                 </tr>
                 </thead><tbody>
                 <tr>
-                <td style="text-align: left">nginx</td>
-                <td style="text-align: left">(空) 、-t、-s [reload|restart|stop]</td>
-                <td style="text-align: left">启动、 测试、 [重新加载|重启动|停止]</td>
+                <td>进入vim</td>
+                <td>1.只读进入</td>
+                <td>只读进入</td>
+                <td>vi -r file</td>
+                <td >只读进入，被编译后，不能回存，但可另存为</td>
+                <td>1）、文件为新建文件，或者文件已经存在<br>
+                  2）、vi在工作时，会在当前目录下创建交换文件（叫.swp的临时文件）<br>
+                  当vi结束对当前文件编辑且正常退出时，临时文件.sw会被自动删除<br>
+                  当vi结束对当前文件编辑且非正常退出时，临时文件.swp会被残留下来<br>
+                  <br>
+                  使用“:n”切换到下一个文件；使用“:N”上一个文件</td>
                 </tr>
                 <tr>
-                <td style="text-align: left">nginx.conf</td>
-                <td style="text-align: left">(空)</td>
-                <td style="text-align: left">配置文件</td>
+                <td>　</td>
+                <td>2. 恢复进入</td>
+                <td>crash恢复</td>
+                <td>vi -r / vi -L file</td>
+                <td>列出当前目录内所有因vi非正常退出而残留的交换文件，以便恢复。<br>
+                  从vi crash或非正常退出中恢复文件</td>
+                <td>　</td>
                 </tr>
                 <tr>
-                <td style="text-align: left">logs - [access.log|error.log]</td>
-                <td style="text-align: left">(空)</td>
-                <td style="text-align: left">日志 - [访问日志|错误日志]</td>
+                <td>　</td>
+                <td>　</td>
+                <td>swap恢复</td>
+                <td>vi -r .*.swp</td>
+                <td>从交换文件.*.swp中恢复文件</td>
                 </tr>
+                <tr>
+                <td> </td>
+                <td>3. 行进入</td>
+                <td>首行行首（默认）</td>
+                <td>vi file</td>
+                <td>打开文件，并把光标置于首行行首（默认）</td>
+                <td>　</td>
+                </tr>
+               <tr>
+                <td> </td>
+                <td> </td>
+                <td>末行行首</td>
+                <td>vi + file</td>
+                <td>打开文件，并把光标置于末行行首</td>
+                <td></td>
+               </tr>
+               <tr>
+                <td></td>
+                <td></td>
+                <td>#行行首</td>
+                <td>vi +# file</td>
+                <td>打开文件，并把光标置于第#行行首（打开已存在文件）</td>
+                <td>　</td>
+                </tr>
+                <tr>
+                <td></td>
+                <td>4. 默认进入</td>
+                <td >默认进入</td>
+                <td>vi</td>
+                <td>以默认模式进入</td>
+                <td>　</td>
+                </tr>
+                <tr>
+                <td></td>
+                <td>5. 多文件进入</td>
+                <td>多文件进入</td>
+                <td>vi file1 file2 file#</td>
+                <td>一次性打开#个文件。<br>
+                  使用“:n”切换到下一个文件；使用“:N”上一个文件</td>
+                <td>　</td>
+                </tr>
+                <tr>
+                <td></td>
+                <td>6. 匹配字符串进入</td>
+                <td>匹配字符串进入</td>
+                <td>vi
+                +/str file</td>
+                <td>打开文件，并把光标置于第一个与str字符串匹配的串处</td>
+                <td>　</td>
+                </tr>
+                <tr >
+                <td>退出vim</td>
+                <td>1. 不保存退出</td>
+                <td>不保存</td>
+                <td>不保存文件，退出vi（当文件已改变时，则不能退出vi）</td>
+                <td>　</td>
+                <td>　</td>
+                </tr>
+                <tr>
+                <td>　</td>
+                <td>　</td>
+                <td>不保存-强制退出</td>
+                <td>q!</td>
+                <td>不保存文件，退出vi（强制退出）</td>
+                <td>　</td>
+               </tr>
+               <tr>
+                <td></td>
+                <td>2. 保存不退出</td>
+                <td>保存</td>
+                <td>:w</td>
+                <td>保存到本文件</td>
+                <td>　</td>
+               </tr>
+               <tr>
+                <td></td>
+                <td></td>
+                <td>另存为-新建</td>
+                <td>:w file</td>
+                <td>不保存到本文件，另存为文件file（新建）</td>
+                <td>　</td>
+               </tr>
+               <tr>
+                <td></td>
+                <td></td>
+                <td>另存为-新建-指定行间</td>
+                <td>:n1,n2 w file</td>
+                <td>把n1行到n2行的内容保存到文件file（新建）</td>
+                <td>　</td>
+               </tr>
+               <tr>
+                <td></td>
+                <td></td>
+                <td>另存为-已存在</td>
+                <td>:w! file</td>
+                <td>不保存到本文件，另存为文件file（已存在）</td>
+                <td>　</td>
+               </tr>
+               <tr>
+                <td></td>
+                <td></td>
+                <td>另存为-已存在-指定行间</td>
+                <td>:n1,n2 w! File</td>
+                <td>把n1行到n2行的内容保存到文件file（已存在）</td>
+                <td>　</td>
+               </tr>
+               <tr>
+                <td></td>
+                <td></td>
+                <td>追加到-已存在文件</td>
+                <td>:w &gt;&gt; file</td>
+                <td>不保存到本文件，把内容追加到文件file（已存在）</td>
+                <td>　</td>
+               </tr>
+               <tr>
+                <td></td>
+                <td>3. 保存退出</td>
+                <td>保存退出</td>
+                <td>:wq / :x / ZZ</td>
+                <td>保存到本文件，退出</td>
+                <td>　</td>
+               </tr>
+                <tr>
+                <td>移动光标</td>
+                <td>移动光标 -
+                字符</td>
+                <td>移动光标 - 字符 - 向前</td>
+                <td>#h
+                / #←</td>
+                <td>光标向前，移动#个字符（当#=1，可省略）</td>
+                <td>　</td>
+               </tr>
+               <tr>
+                <td>　</td>
+                <td>　</td>
+                <td>移动光标 - 字符 - 向后</td>
+                <td>#l
+                / #→ / #[空格]</td>
+                <td>光标向后，移动#个字符（当#=1，可省略）</td>
+                <td>　</td>
+               </tr>
+               <tr>
+                <td>　</td>
+                <td>　</td>
+                <td>移动光标 - 字符 - 向左</td>
+                <td>t&amp;</td>
+                <td>光标往右，移动到&amp;字符前</td>
+                <td>　</td>
+               </tr>
+               <tr>
+                <td>　</td>
+                <td>　</td>
+                <td>移动光标 - 字符 - 向右</td>
+                <td>f&amp;</td>
+                <td>光标往右，移动到&amp;字符上</td>
+                <td>　</td>
+               </tr>
+               <tr>
+                <td>　</td>
+                <td>移动光标 - 字</td>
+                <td>移动光标 - 字 - 前 - 字头</td>
+                <td>#b</td>
+                <td>光标跳到当一前字/上一个字的字头（当#=1，可省略）</td>
+               </tr>
+               <tr>
+                <td>　</td>
+                <td>　</td>
+                <td>移动光标 - 字 - 前 - 字末</td>
+                <td>#e</td>
+                <td>光标跳到当前字/上一个字的字未（当#=1，可省略）</td>
+                <td>　</td>
+               </tr>
+                <tr>
+                <td></td>
+                <td>　</td>
+                <td>移动光标 - 字 - 后 - 字头</td>
+                <td>#w</td>
+                <td>光标跳到下一个字的字头（当#=1，可省略）</td>
+                <td>　</td>
+               </tr>
+                <tr>
+                <td>移动光标 - 行</td>
+                <td>所在行行首</td>
+                <td>shift
+                + 6 (^)</td>
+                <td>　</td>
+                <td>定位光标到，所在行行首（首字母上）</td>
+                <td>　</td>
+               </tr>
+               <tr>
+                <td></td>
+                <td>所在行行末</td>
+                <td>shift
+                + 4 ($)</td>
+                <td>　</td>
+                <td>定位光标到，所在行行末（首字母上）</td>
+                <td>　</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td >第#行行首</td>
+                <td >:#</td>
+                <td >　</td>
+                <td >定位光标到，第#行行首（首字母上）</td>
+                <td >　</td>               
+               </tr>
+               <tr >
+                <td ></td>
+                <td >最后行行首</td>
+                <td >:$</td>
+                <td >　</td>
+                <td >定位光标到，最后一行行首（首字母上）</td>
+                <td >　</td>              
+               </tr>
+               <tr >
+                <td ></td>
+                <td >行首为str</td>
+                <td >/^str&lt;回车&gt;</td>
+                <td >　</td>
+                <td >光标移动到，行首为字符串str的行首（首字母上）</td>
+                <td >　</td>              
+               </tr>
+               <tr >
+                <td ></td>
+                <td >行末为str</td>
+                <td >/str$&lt;回车&gt;</td>
+                <td >　</td>
+                <td >光标移动到，行末为字符串str的行（末字母上）</td>
+                <td >　</td>             
+               </tr>
+               <tr >
+                <td ></td>
+                <td >向上</td>
+                <td >#k
+                / #↑ / #- &lt;回车&gt;</td>
+                <td >　</td>
+                <td >向上移动一行，（当#=1，可省略)（
+                -是行首；其他垂直）</td>
+                <td >　</td>              
+               </tr>
+               <tr >
+                <td ></td>
+                <td >向下</td>
+                <td >#j
+                / #↓ / #+ / # &lt;回车&gt;</td>
+                <td >　</td>
+                <td >向下移动一行，（当#=1，可省略)（
+                -是行首；其他</td>
+                <td >　</td>              
+               </tr>
+               <tr >
+                <td ></td>
+                <td >指定#行</td>
+                <td >#G</td>
+                <td >　</td>
+                <td >光标移动到，指定的第#行</td>
+                <td >　</td>
+               </tr>
+               <tr >
+                <td>移动光标 - 屏幕</td>
+                <td >最上行</td>
+                <td >H</td>
+                <td >　</td>
+                <td >光标移动到，屏幕最上方一行（首字母上）（Head）</td>
+                <td >　</td>
+               </tr>
+               <tr >
+                <td >　</td>
+                <td >中间一行</td>
+                <td >M</td>
+                <td >　</td>
+                <td >光标移动到，屏幕中间一行（首字母上）（Middle）</td>
+                <td >　</td>
+               
+               </tr>
+               <tr >
+                <td >　</td>
+                <td >最下行</td>
+                <td >L</td>
+                <td >　</td>
+                <td >光标移动到，屏幕最下方一行（首字母上）（Last）</td>
+                <td >　</td>
+               
+               </tr>
+               <tr >
+                <td >　</td>
+                <td >半屏 - 向前</td>
+                <td >Ctrl
+                + u</td>
+                <td >　</td>
+                <td >向前翻半屏</td>
+                <td >　</td>
+               
+               </tr>
+               <tr >
+                <td ></td>
+                <td >半屏 - 向后</td>
+                <td >Ctrl
+                + d</td>
+                <td >　</td>
+                <td >向后翻半屏</td>
+                <td >　</td>
+               
+               </tr>
+               <tr >
+                <td ></td>
+                <td >整屏 - 向前</td>
+                <td >Ctrl
+                + b</td>
+                <td >　</td>
+                <td >向前翻整屏</td>
+                <td >　</td>
+               
+               </tr>
+               <tr >
+                <td ></td>
+                <td >整屏 - 向后</td>
+                <td >Ctrl
+                + f</td>
+                <td >　</td>
+                <td >向后翻整屏</td>
+                <td >　</td>
+               </tr>
+              <tr >
+                <td>移动光标 - 文件</td>
+                <td >第1行</td>
+                <td >gg</td>
+                <td >　</td>
+                <td >光标移动到，文件的第一行（首字母上）</td>
+                <td >　</td>
+               
+               </tr>
+               <tr >
+                <td >　</td>
+                <td >最后1行</td>
+                <td >G</td>
+                <td >　</td>
+                <td >光标移动到，文件的最后一行（首字母上）</td>
+                <td >　</td>
+               
+               </tr>
+               <tr >
+                <td >　</td>
+                <td >上一个文件</td>
+                <td >:N</td>
+                <td >　</td>
+                <td >定位到上一个文件（当编辑多个文件时有效）</td>
+                <td >　</td>         
+               </tr>
+               <tr >
+                <td ></td>
+                <td >下一个文件</td>
+                <td >:n</td>
+                <td >　</td>
+                <td >定位到下一个文件（当编辑多个文件时有效）</td>
+                <td >　</td>
+               </tr>
+               <tr>
+                <td>设置命令:set
+                xxx&lt;回车&gt;</td>
+                <td>设置行号</td>
+                <td >显示行号</td>
+                <td >:set
+                nu</td>
+                <td >　</td>
+                <td >显示行号（number）</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >不显示行号</td>
+                <td >:set
+                nonu</td>
+                <td >　</td>
+                <td >不显示行号（no number）</td>      
+               </tr>
+               <tr >
+                <td ></td>
+                <td>设置搜索</td>
+                <td >忽略大小写</td>
+                <td >:set
+                ic</td>
+                <td >　</td>
+                <td >搜索时忽略大小写 (ignore
+                case)</td>     
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >不忽略大小写</td>
+                <td >:set
+                noic</td>
+                <td >　</td>
+                <td >搜索时不忽略大小写 ( no ignore
+                case)</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td>设置缩进</td>
+                <td >缩进格数</td>
+                <td >:set
+                shiftwidth=#</td>
+                <td >　</td>
+                <td >设置自动缩进格数为#（默认为4)</td>         
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >打开/关闭缩进</td>
+                <td >:set
+                autoindent</td>
+                <td >打开自动缩进功能</td>
+                <td >　</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td>粘贴时关闭自动缩进</td>
+                <td >:set
+                paste</td>
+                <td >粘贴的时候关闭自动缩进</td>
+                <td ></td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td >　</td>
+                <td >粘贴时打开自动缩进</td>
+                <td >:set
+                nopaste</td>
+                <td >粘贴的时候打开自动缩进</td>
+                <td >　</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td >设置填充</td>
+                <td >设置填充</td>
+                <td >:ab
+                str str2</td>
+                <td >填充设置：str1 → str2</td>
+                <td >　</td>
+               </tr>
+               <tr >
+                <td>搜索类</td>
+                <td>搜索 - 查询</td>
+                <td >正序</td>
+                <td >/str</td>
+                <td >正序查找定位</td>
+                <td>重复查找：n：正序 / N：反序</td>  
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >逆序</td>
+                <td >？str</td>
+                <td >逆序查找定位</td>
+                <td ></td>              
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >括号配对</td>
+                <td >%</td>
+                <td >配对括号
+                (注释：把光标放在要查找行的任何一个括号（正/反）;首次<span style='display:none'>按%，定位到配对；再次按返回原括号;在程序调试时，该功能用來查找不配对的的括号是很有用的。)</span></td>
+                <td ></td>
+               </tr>
+               <tr>
+                <td ></td>
+                <td>搜索 - 替换</td>
+                <td >所在行匹配第一个</td>
+                <td >:s/OldStr/NewStr</td>
+                <td >　</td>
+                <td >在所在行，替换匹配第一个匹配串；OldStr
+                → NewStr</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >所在行全部匹配</td>
+                <td >:s/OldStr/NewStr/g</td>
+                <td >　</td>
+                <td >在所在行，替换全行的匹配串；OldStr
+                → NewStr</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >指定行之间</td>
+                <td >:#1,#2s/OldStr/NewStr/g</td>
+                <td >　</td>
+                <td >在指定两行，替换每个配对串；OldStr
+                → NewStr</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >整个文件 - 询问</td>
+                <td >:%s/OldStr/NewStr/g</td>
+                <td >　</td>
+                <td >在整个文件，
+                替换每个配对串（每个替换不需询问用户)；OldStr → N<span style='display:none'>ewStr</span></td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >整个文件 - 不询问</td>
+                <td >:%s/OldStr/NewStr/gc</td>
+                <td >　</td>
+                <td >在整个文件，
+                替换每个配对串（每个替换需询问用户 )；OldStr → Ne<span style='display:none'>wStr</span></td>
+               </tr>
+               <tr >
+                <td>插入类</td>
+                <td>1. 光标插入</td>
+                <td >插入 - 光标 - 光标前</td>
+                <td >i</td>
+                <td >在当前光标之前，插入文本</td>
+                <td>进入插入模式</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >插入 - 光标 - 光标后</td>
+                <td >a</td>
+                <td >　</td>
+                <td >在当前光标之后，插入文本</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td>2. 行内插入</td>
+                <td >插入 - 行 - 当前行行首</td>
+                <td >I</td>
+                <td >　</td>
+                <td >在当前行的行首，插入文本</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >插入 - 行 - 当前行行末</td>
+                <td >A</td>
+                <td >　</td>
+                <td >在当前行的行末，插入文本</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td>3. 插入空行</td>
+                <td >插入 - 空行 - 当前行上方</td>
+                <td >o</td>
+                <td >　</td>
+                <td >在当前行的上方，插入新行</td>
+               
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >插入 - 空行 - 当前行下方</td>
+                <td >O</td>
+                <td >　</td>
+                <td >在当前行的下末，插入新行</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td>4. 提取和合并文件</td>
+                <td >-</td>
+                <td >:r
+                file</td>
+                <td >　</td>
+                <td >提取磁盘文件，在当前文件的当前光标后面，插入文本</td>
+               </tr>
+               <tr>
+                <td>替换类</td>
+                <td>1. 替换字符</td>
+                <td>替换 - 字符 - 单词字符</td>
+                <td >r</td>
+                <td >替换当前字符</td>
+                <td>进入替换模式；<br>
+                  更改类指令 [n] c object/c [n] object：<br>
+                  1）、更改类指令c可以使用同刪除类命令d所使用的对象参数[w、e、d、$]<br>
+                  2）、C类指令会进入插入模式进行修改</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td >2. 替换多个字符</td>
+                <td >替换 - 字符 - 多个字符</td>
+                <td >R</td>
+                <td >　</td>
+                <td >替换当前字符，直到按下“ESC”键为止</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td>3. 替换单词/字</td>
+                <td >替换 - 字</td>
+                <td >c#w</td>
+                <td >　</td>
+                <td >从当前字字首到#个字字尾（包括当前字）（当#=1，可省略）</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td>4. 替换行</td>
+                <td >替换 - 行 - 至行末</td>
+                <td >C</td>
+                <td >　</td>
+                <td >在当前行，从当前光标处到当前行的行未（包括当前字符）插入</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >替换 - 行 - 整行</td>
+                <td >S/cc</td>
+                <td >　</td>
+                <td >在当前行，先清除当前行，再从当前光标处到当前行的行未（包括当前<span
+                style='display:none'>字符）插入</span></td>
+               </tr>
+               <tr>
+                <td>复制类</td>
+                <td>复制 - 字</td>
+                <td >复制 - 字</td>
+                <td >#yw</td>
+                <td >　</td>
+                <td >在当前字，从当前字当前光标到当前字/n个字的字尾，复制到无名缓冲<span
+                style='display:none'>区（包含当前字符、当前字）（当#=1，可省略）</span></td>
+               </tr>
+               <tr >
+                <td></td>
+                <td>复制 - 行</td>
+                <td >复制 - 行 - 指定行间内容<span
+                style='display:none'>到指定行的下一行</span></td>
+                <td >:#1,#2<span
+                style='mso-spacerun:yes'>&nbsp; </span>t<span style='mso-spacerun:yes'>&nbsp;
+                </span>#3</td>
+                <td >　</td>
+                <td >把#1～#2行复制到#3行的下一行</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >复制 - 行 - 当前行(无名缓<span
+                style='display:none'>冲区)</span></td>
+                <td >yy/Y</td>
+                <td >　</td>
+                <td >将当前行，放入无名缓冲区</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >复制 - 行 - 当前行(指定缓<span
+                style='display:none'>冲区)</span></td>
+                <td >&amp;yy</td>
+                <td >　</td>
+                <td >将当前行，放入缓冲区&amp;</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >复制 - 行 - 指定#行(无名<span
+                style='display:none'>缓冲区)</span></td>
+                <td >#yy</td>
+                <td >　</td>
+                <td >将从当前行的#行，放入无名缓冲区（当#=1，可省略）</td>
+               </tr>
+               <tr>
+                <td>剪切/删除</td>
+                <td>1. 删除字符</td>
+                <td>剪切 - 字符 - 前(不包括当<span
+                style='display:none'>前字符)</span></td>
+                <td >#x</td>
+                <td >删除当前光标前的n个字符（不包括当前字符）（当#=1，可省略）</td>
+                <td>d：delete<br>
+                  删除即剪切，当执行删除操作后，把删除的内容放在有名或者无民缓冲区。当使用粘贴命令进行粘贴时，删除就变成了剪切。<br>
+                  1）、删除命令的d格式 <br>
+                  <span style='mso-spacerun:yes'>&nbsp; </span>[n]<span
+                style='mso-spacerun:yes'>&nbsp; </span>d<span style='mso-spacerun:yes'>&nbsp;
+                </span>object 或者 d<span style='mso-spacerun:yes'>&nbsp; </span>[n]<span
+                style='mso-spacerun:yes'>&nbsp; </span>object<br>
+                  <span style='mso-spacerun:yes'>&nbsp; </span>其中:<br>
+                  <span style='mso-spacerun:yes'>&nbsp;&nbsp; </span>n- 代表執行命令的次數(可选项，缺省设置为 1
+                )。<br>
+                  <span style='mso-spacerun:yes'>&nbsp;&nbsp; </span>d - 代表刪除。<br>
+                  <span style='mso-spacerun:yes'>&nbsp;&nbsp; </span>object –
+                代表命令所要操作的对像。<br>
+                  <span style='mso-spacerun:yes'>&nbsp; </span>对象列表︰<br>
+                  <span style='mso-spacerun:yes'>&nbsp;&nbsp; </span>w
+                –从当前光标到单词末尾，包括空格。<br>
+                  <span style='mso-spacerun:yes'>&nbsp;&nbsp; </span>e -从当前光标到单词末尾，但是 *不*
+                包括空格。<br>
+                  <span style='mso-spacerun:yes'>&nbsp;&nbsp; </span>$ - 从当前光标到行末<br>
+                  <span style='mso-spacerun:yes'>&nbsp;&nbsp; </span>d<span
+                style='mso-spacerun:yes'>&nbsp; </span>- 删除当前行<br>
+                  说明：<br>
+                  1）、2dd=dj：删除当前行和下一行；
+                第一个“d”的后面的可以跟另外的移动命令来代替第二个”d“，比如用移动到下一行的“j”键可以删除当前行和下一行。<br>
+                  <br>
+                  默认情况下，vi使用无名缓冲区，例如：虽然将文件的某些部分删除了，但仍可以用u命名进行撤销。</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >剪切 - 字符 - 前(包括当前<span
+                style='display:none'>字符)</span></td>
+                <td >#X</td>
+                <td >　</td>
+                <td >删除当前光标前的n个字符（包括当前字符）（当#=1，可省略）</td>
+               
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >剪切 - 字符 - 后</td>
+                <td >s</td>
+                <td >　</td>
+                <td >删除光标后的一个字符，并进入插入模式</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td>2. 删除字</td>
+                <td >剪切 - 删除字 -</td>
+                <td >de</td>
+                <td >　</td>
+                <td >删除从当前光标到当前光标所在单词末尾（不包括空格）</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >剪切 - 删除字 -</td>
+                <td >dw</td>
+                <td >　</td>
+                <td >删除从当前光标到当前光标所在单词末尾（不包括空格）</td>
+               </tr>
+               <tr>
+                <td ></td>
+                <td>3. 删除行</td>
+                <td >剪切 - 行 - 单行行末</td>
+                <td >D$
+                / D</td>
+                <td >　</td>
+                <td >从当前光标到行末（不包括当前光标）</td>
+               </tr>
+               <tr>
+                <td ></td>
+                <td ></td>
+                <td >剪切 - 行 - 单行(缓冲区)</td>
+                <td >&amp;dd</td>
+                <td >　</td>
+                <td >删除当前行，将当前行的内容放入缓冲区&amp;</td>
+               
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >剪切 - 行 - 指定行间</td>
+                <td >:#1,#2
+                d</td>
+                <td >　</td>
+                <td >删除指定行之间的内容（包括边界两行）</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >剪切 - 行 - 多行</td>
+                <td >#cj
+                / #dd</td>
+                <td >　</td>
+                <td >删除从当前行开始的#行（包括当前行）（当#=1，可省略）</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >剪切 - 行 - 删除指定行</td>
+                <td >cc/S</td>
+                <td >　</td>
+                <td >删除光标所在的行，并进入插入模式</td>
+               </tr>
+               <tr >
+                <td>移动类</td>
+                <td>移动 - 指定行</td>
+                <td >移动 - 指定行</td>
+                <td >:#1,#2
+                m #3</td>
+                <td >　</td>
+                <td >把#1～#2的内容移动到#3行号的下一行</td>
+               </tr>
+               <tr >
+                <td>粘贴类</td>
+                <td>粘贴 - 指定行</td>
+                <td >移动 - 所在行 - 上一行(无<span
+                style='display:none'>名缓冲区)</span></td>
+                <td >P<span
+                style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>(大写)</td>
+                <td >　</td>
+                <td >从无名缓冲区，粘贴到光标所在行的光标后位置；粘贴到当前行的当前<span
+                style='display:none'>光标前的位置</span></td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >移动 - 所在行 - 下一行(无<span
+                style='display:none'>名缓冲区)</span></td>
+                <td >p<span
+                style='mso-spacerun:yes'>&nbsp; </span>（小写）</td>
+                <td >　</td>
+                <td >从无名缓冲区，粘贴到光标所在行的下一行；粘贴到当前行的当前光标<span
+                style='display:none'>后的位置</span></td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >移动 - 所在行 - 上一行(缓<span
+                style='display:none'>冲区)</span></td>
+                <td >&amp;P（大写）</td>
+                <td >　</td>
+                <td >从缓冲区&amp;，粘贴到光标所在行的上一行；粘贴到当前行的当前光标前的<span
+                style='display:none'>位置</span></td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td ></td>
+                <td >移动 - 所在行 - 下一行(缓<span
+                style='display:none'>冲区)</span></td>
+                <td >&amp;p（小写）</td>
+                <td >　</td>
+                <td >从缓冲区&amp;，粘贴到光标所在行的下一行；粘贴到当前行的当前光标后的<span
+                style='display:none'>位置</span></td>
+               </tr>
+               <tr >
+                <td>撤消类</td>
+                <td >撤消 - 最后执行命令</td>
+                <td >u</td>
+                <td >　</td>
+                <td >用来撤销最后执行的命令</td>
+                <td>u/U：undo<br>
+                  r：redo<br>
+                  如果误执行一个命令，可以马上按下“u”，回到上一个操作；按多次“u”可以执行多次撤销操作。）</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td >撤消 - 修正整行</td>
+                <td >U</td>
+                <td >　</td>
+                <td >修正整行，恢复对该行的原始状态</td>
+                <td ></td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td >撤消 - 重做</td>
+                <td >Ctrl
+                + r</td>
+                <td >　</td>
+                <td >撤销掉以前的撤销命令，恢复以前的操作；重做上一个操作</td>
+               <td ></td>
+               </tr>
+               <tr >
+                <td>合并类</td>
+                <td>-</td>
+                <td >合并 - 有空格</td>
+                <td >J</td>
+                <td >　</td>
+                <td >将光标所在行与下一列的数据结合成同一行（删除回行符(合并两行),
+                <span style='display:none'>合行后中间加一个空格）</span></td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td >合并 - 无空格</td>
+                <td >gJ</td>
+                <td >　</td>
+                <td >将光标所在行与下一列的数据结合成同一行（删除回行符(合并两行)
+                ,<span style='display:none'>合行后中间不加一个空格）</span></td>
+                <td >　</td>
+               </tr>
+               <tr >
+                <td>交换类</td>
+                <td >交换 - 字符</td>
+                <td >xp</td>
+                <td >　</td>
+                <td >交换当前字符与右一个字符位置（此命令是x删除命令与p粘贴命令的组<span
+                style='display:none'>合）</span></td>
+                <td ></td>
+               </tr>
+               <tr>
+                <td></td>
+                <td>交换 - 行</td>
+                <td >dpp</td>
+                <td >　</td>
+                <td >交换上下行位置（此命令是dd删除命令与p粘贴命令的组合）</td>
+                <td >　</td>
+               </tr>
+               <tr>
+                <td>查看类</td>
+                <td >查看 - 搜索历史</td>
+                <td >/↑<span
+                style='mso-spacerun:yes'>&nbsp; </span>/<span style='mso-spacerun:yes'>&nbsp;
+                </span>/↓</td>
+                <td >　</td>
+                <td >查看搜索历史</td>
+                <td >　</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td >查看 - 命令历史</td>
+                <td >:↑<span
+                style='mso-spacerun:yes'>&nbsp; </span>/<span style='mso-spacerun:yes'>&nbsp;
+                </span>:↓</td>
+                <td >　</td>
+                <td >查看命令使用历史</td>
+                <td >　</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td >查看 - 行号</td>
+                <td >Ctrl
+                + g</td>
+                <td >　</td>
+                <td >显示行号</td>
+                <td >　</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td >查看 - 文件信息</td>
+                <td >:args</td>
+                <td >　</td>
+                <td >显示当前文件信息 （【文件名
+                是否修改<span style='mso-spacerun:yes'>&nbsp; </span>当前第一行<span
+                style='mso-spacerun:yes'>&nbsp; </span>前面所占行的<span style='display:none'>百分比】）</span></td>
+                <td >　</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td >查看 - 帮助(所有命令)</td>
+                <td >:help
+                &lt;回车&gt;</td>
+                <td >　</td>
+                <td >查看所有帮助</td>
+                <td rowspan=2 class=xl77 width=458 style='border-top:none;width:344pt'>提供一個正確的参数給&quot;:help&quot;命令，可以找到關于该主題的帮助。例如输入一下参数<span
+                style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span><br>
+                  <span style='mso-spacerun:yes'>&nbsp; </span>:help w &lt;回车&gt;<br>
+                  <span style='mso-spacerun:yes'>&nbsp; </span>help c_&lt;T &lt;回车&gt;<br>
+                  <span style='mso-spacerun:yes'>&nbsp; </span>:help insert-index
+                &lt;回车&gt;<br>
+                  <span style='mso-spacerun:yes'>&nbsp; </span>:help user-manual &lt;回车&gt;</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td >查看 - 帮助(特定命令)</td>
+                <td >:help
+                command &lt;回车&gt;</td>
+                <td >　</td>
+                <td >查看关于command的帮助</td>
+               </tr>
+               <tr>
+                <td></td>
+                <td>执行外部命令</td>
+                <td >:!
+                command&lt;回车&gt;</td>
+                <td >　</td>
+                <td >执行命令</td>
+                <td class=xl77 width=458 style='border-top:none;border-left:none;width:344pt'>所有的外部命令都可以以这种方式执行；<br>
+                  所有的 : 命令都必須以 &lt;回车&gt; 结束。<br>
+                  实例：在同一个终端中编辑、编译并运行C++程序<br>
+                  <span style='mso-spacerun:yes'>&nbsp; </span>编辑：vim test.cpp<br>
+                  <span style='mso-spacerun:yes'>&nbsp; </span>编译：:!g++ test.cpp -o t<br>
+                  <span style='mso-spacerun:yes'>&nbsp; </span>查看：:!ls<br>
+                  <span style='mso-spacerun:yes'>&nbsp; </span>运行：:!./t</td>
+               </tr>
+               <tr>
+                <td></td>
+                <td>工作方式</td>
+                <td >命令模式 → 编辑模式</td>
+                <td >a、A、i、I、o、O等命令</td>
+                <td >命令模式：通过输入vi的命令对文件的内容进行处理(复制、删除、移动<span
+                style='display:none'>等);通过按光标键来移动光标。</span></td>
+                <td>vim有三种工作方式：<br>
+                  命令模式（/普通模式/正常模式）、编辑模式（/插入模式）和底行模式（/底行模式/命令想模式）<br>
+                  命令模式：通过输入vi的命令对文件的内容进行处理(复制、删除、移动等);通过按光标键来移动光标。<br>
+                  编辑模式：在光标处输入内容。<br>
+                  底行模式：在命令模式下，用户输入冒号后，光标会跳到底行，然后输入命令。</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td >编辑模式 → 命令模式</td>
+                <td >ESC</td>
+                <td >　</td>
+                <td >编辑模式：在光标处输入内容。</td>
+               </tr>
+               <tr >
+                <td ></td>
+                <td >命令模式 → 底行模式</td>
+                <td >:</td>
+                <td >　</td>
+                <td >命令项模式：在命令模式下，用户输入冒号后，光标会跳到底行，然后<span
+                style='display:none'>输入命令。</span></td>
+               </tr>
                 </tbody></table>
             </article>
         </div><!-- end div col-md-12-->
