@@ -4,8 +4,8 @@
   <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>第一篇博客 - Start Nginx - BradyPod's Blog</title>
-  <meta name="description" content="第一篇博客，Start Nginx；89后，工作在广州；Java程序员。">
+  <title>Linux vim 快捷键 - BradyPod's Blog</title>
+  <meta name="description" content="Linux vim 快捷键；89后，工作在广州；Java程序员。">
   <meta name="keywords" content="java, linux, shell, nginx, lua, mysql, memcached, redis">
   <meta name="author" content="bradypod">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,7 +29,7 @@
   <div class="container">
 
     <header class="header">
-      <div class="title"><a target="_blank" title="bradypod's blog" href="/">BradyPod's blog</a></div>
+      <div class="title"><a title="bradypod's blog" href="/">BradyPod's blog</a></div>
       <ul class="nav navbar-nav navbar-right visible-lg visible-md">
         <li>
           <form id="search-form" class="form-group has-success visible-lg" role="form">
@@ -46,86 +46,33 @@
       <div class="row">
         <div class="col-md-12">
           <article class="news-item">
-              <h2><a href="#">第一篇博客 - Start Nginx</a><small>  2015.01.16</small></h2>
+              <h2><a href="#">Linux vim 快捷键 </a><small>  2015.01.20</small></h2>
 
-                这是第一篇文章，就从我最着迷的Nginx开启吧。
+                这是第三篇文章，Linux Vim快捷键备忘。
                 <div>
-                  <p>Nginx ("engine x") 是一个高性能的 HTTP 和 反向代理 服务器，也是一个 IMAP/POP3/SMTP 代理服务器。 Nginx 是由 Igor Sysoev 为俄罗斯访问量第二的 Rambler.ru 站点开发的，第一个公开版本0.1.0发布于2004年10月4日。其将源代码以类BSD许可证的形式发布，因它的稳定性、丰富的功能集、示例配置文件和低系统资源的消耗而闻名。2011年6月1日，nginx 1.0.4发布。
-                  <<<a href="http://baike.baidu.com/link?url=B-y6uuN3j8dtbUc22KjKbXrIzQ_led_I4QhVJfW15KLHs9rM2Dm1Bf9NRH8zKHX6J_3cX2SmgWYuZliHR_KLE_" title="懒人链接">来自百度词条</a>>></p>
-                  <h3>Start Nginx - Install</h3>
-                  <p>学习Nginx前最好具备以下几种有点：</p>
-                  <ul>
-                    <li>折腾，喜欢折腾， 不停地折腾；</li>
-                    <li>折腾Linux，喜欢折腾Linux， 不停地折腾Linux；</li>
-                    <li>具备web开发的基础，如php、java等；</li>
-                    <li>追求轻量级，追求高性能；</li>
-                    <li>最好准备一台自己的折腾云主机，首推CentOS操作系统， 谁用谁知道！</li>
-                  </ul>
-                  <p>开始折腾：</p>
-                  <ul>
-                    <li><a href="http://nginx.org/" title="懒人链接">直奔官网</a>，随意看看，下载一个stable版本的tar包；</li>
-                    <li>nginx的安装存在一些依赖，所以直接下载tar包是没用的；（LOL）</li>
-                    <li>我比较推荐进行源码安装，如果在centos还可以使用yum一键安装；（<a href="#">后续</a>）</li>
-                    <li>一大堆废话后， 开始我们的源码安装，推荐使用wget命令下载，或者在windows上下载好，再上传上来。</li>
-                  </ul>
+                  <p>Vim是一个类似于Vi的文本编辑器，不过在Vi的基础上增加了很多新的特性，Vim普遍被推崇为类Vi编辑器中最好的一个，事实上真正的劲敌来自Emacs的不同变体。1999 年Emacs被选为Linuxworld文本编辑分类的优胜者，Vim屈居第二。但在2000年2月Vim赢得了Slashdot Beanie的最佳开放源代码文本编辑器大奖，又将Emacs推至二线， 总的来看， Vim和Emacs同样都是非常优秀的文本编辑器。
+                  <<<a target="_blank" href="http://baike.baidu.com/link?url=X--RTT5Mgts0pg6JhVcLWPBtRsRZ0zDwmiiIc5yGXivyWnjxNt5kMpBP6d21yTpM6mmF0eSMFz3fXZ9D1rvVmqQTS6pW26NOEEb-RcTb3PW" title="懒人链接">来自百度词条</a>>></p>
+
+                  <h4>vim常用快捷键列表</h4>
+                  <p>熟练vim，还是需要多用，多积累，不过熟悉vim并不能让你称为什么真正的大牛， 纯折腾。@~—~@</p>        
 <div class="">
 <pre class="prettyprint lang-shell linenums">
-### 安装PCRE库
-cd /usr/local/src 
-wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.34.tar.gz 
-tar -zxvf pcre-8.34.tar.gz 
-cd pcre-8.34 
-./configure 
-make && make instal 
-
-### 安装zlib库 
-cd /usr/local/src 
-wget http://zlib.net/zlib-1.2.8.tar.gz 
-tar -zxvf zlib-1.2.8.tar.gz 
-cd zlib-1.2.8 
-./configure 
-make && make instal
-
-### 下载ssl，解压即可（某些vps默认没装ssl) 
-
-cd /usr/local/src 
-wget http://www.openssl.org/source/openssl-1.0.1c.tar.gz 
-tar -zxvf openssl-1.0.1c.tar.gz
-
-### 安装nginx 官网选择版本,修改xxx为版本号
-cd /usr/local/src 
-wget http://nginx.org/download/nginx-xxx.tar.gz 
-tar -zxvf nginx-xxx.tar.gz 
-cd nginx-xxx/
-./configure --sbin-path=/usr/local/nginx/nginx \
---conf-path=/usr/local/nginx/nginx.conf \
---pid-path=/usr/local/nginx/nginx.pid \
---with-http_ssl_module \
---with-pcre=/usr/local/src/pcre-8.34 \
---with-zlib=/usr/local/src/zlib-1.2.8 \
---with-openssl=/usr/local/src/openssl-1.0.1c
-make && make install
-
-### 启动nginx
-netstat -ano|grep 80
-### 检查不被占用， 则执行
-/usr/local/nginx/nginx
-
-### 测试访问
-curl -i http://localhost
-
-PS: 以上编译安装依赖于gcc、make，如果没有安装
-centos下可以执行
-yum -y install gcc automake autoconf libtool make
-yum -y install gcc gcc-c++
+#!/bin/sh
+first line
+second line
+third line
+### 删除一行 dd  撤销上一次操作 u 从缓冲区向下复制一行小写 p  向上大写 P
+### 结合起来可以这样玩 ddp（当前行和下一行对换）ddP（反之） ddup（向下复制当前行）dduP （反之）
 </pre>
 </div>
-                <p>相关描述</p>
+                <p>常用命令集合</p>
                 <table><thead>
                 <tr>
-                <th style="text-align: left">名称</th>
-                <th style="text-align: left">参数</th>
-                <th style="text-align: left">意义</th>
+                <th style="text-align: left">区域</th>
+                <th style="text-align: left">分类</th>
+                <th style="text-align: left">功能</th>
+                <th style="text-align: left">按键</th>
+                <th style="text-align: left">说明</th>
                 </tr>
                 </thead><tbody>
                 <tr>
