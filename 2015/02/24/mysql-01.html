@@ -86,8 +86,6 @@ master - slaves - slaves - ..
 master - master - slaves - ..
 级别架构可以根据自己系统的实际情况选择
 
-
-
 -- 数据库导入导出
 导出我选择用mysqldump，如果数据库太大，建议用gzip压缩
 mysqldump -p db_name | gzip > db_name.gz
@@ -95,6 +93,7 @@ mysqldump -p db_name | gzip > db_name.gz
 mysql>create database db_name; 
 shell>gunzip < db_name.gz | mysql db_name
 
+ps : 下次再更新
 </pre> 
 </div><!-- end pretty div -->
 
