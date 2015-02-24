@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>2015年春节快乐-树懒博客-BradyPod's Blog</title>
+  <title>mysql主从配置-树懒博客-BradyPod's Blog</title>
   <meta name="description" content="树懒博客；BradyPod's Blog;89后，工作在广州；Java程序员。">
   <meta name="keywords" content="java, linux, shell, nginx, lua, mysql, memcached, redis">
   <meta name="author" content="bradypod">
@@ -38,17 +38,65 @@
 		<div class="row">
         <div class="col-md-12">
           <article class="news-item">
-  		    <h2>大年三十，迎接新的一年 <small> 2015.02.18</small></h2>
+  		    <h2>mysql主从架构设计 - master&slave<small> 2015.02.24</small></h2>
   		    </aritcle>
 <div>
-<pre class="prettyprint lang-javascript linenums">
-新年新气象，祝福各位新春快乐，心想事成。
-昨天去抓了汽车，踩离合，挂1档，放手刹，松离合，希望早日能有自己的车子。
-</pre>
+<pre class="prettyprint">
+1 配置master和slave的my.ini
+[mysqld]
+log-bin=mysql-bin
+server-id=141  #可以以当前机器ip最后一段命名，保证唯一即可
+...
+/etc/init.d/mysqld restart #各自重启不报错即可
+
+2 启动主从
+2.1 登陆主服务器mysql
+mysql>show master status;
++------------------+----------+--------------+------------------+
+| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB |
++------------------+----------+--------------+------------------+
+| mysql-bin.000001 |      106 |              |                  |
++------------------+----------+--------------+------------------+
+ps: 执行完此步骤后不要再操作主服务器mysql，防止主服务器状态值变化
+
+2.2 登陆从服务器mysql
+mysql>change master to master_host='master数据库地址',master_user='账号',master_password='密码', master_log_file='mysql-bin.000001',master_log_pos=106;
+注意修改对应的文件名和位置，逗号不要断开；
+mysql> start slave;
+mysql> show slave status \G;
+...
+Slave_IO_Running: Yes
+Slave_SQL_Running: Yes
+...
+
+如果看到两个Yes，则证明配置没有问题，主从已经配置完成。当然你可能没那么顺利，会遇到类似授权问题，导入导出等问题。
+
+3 主从架构选择
+3.1 master - slaves
+一个主服务器， 一个或多个从服务器， 主服务器提供读写， 从服务器负责同步， 当读压力大的时候，
+可以将读的请求分散到各个从服务器上， 目前阿里云的rds就是推荐这种方式给创业公司使用。
+优点： 可以简单避免单点， 当主服务器挂掉后， 可以切换到从服务器上， 可以实现读写分离；
+缺点： 当确实出现灾难无法启动主服务器时， 还是得人工干预切换；无法解决写的单点；当网络IO缓慢的时候，可能导致数据不同步；
+3.2 master - master (dual master)
+互为主从， 这个很好理解， 即配置上面master-slave的，再反过来再配一次。
+优点：解决了读写单点；
+缺点：还是那个问题，mysql的复制是异步执行的，当实时性要求高的系统，在一定并发下会出现数据修改不同步的问题；
+3.3 级别架构
+master - slaves - slaves - ..
+master - master - slaves - ..
+级别架构可以根据自己系统的实际情况选择
+
+
+
+-- 数据库导入导出
+导出我选择用mysqldump，如果数据库太大，建议用gzip压缩
+mysqldump -p db_name | gzip > db_name.gz
+导入如果没用gzip压缩就直接source就行了, 数据库记得先创建
+mysql>create database db_name; 
+shell>gunzip < db_name.gz | mysql db_name
+
+</pre> 
 </div><!-- end pretty div -->
-          
-        <div id="myCanvas"><div>
-         
 
         </div><!-- end col md 12 div -->
     </div><!-- end row -->
@@ -68,8 +116,10 @@
     </div><!-- end container -->
 
   <script type="text/javascript">
+    
     /*入口*/
    (function(){
+    
     })();
   </script>
 
