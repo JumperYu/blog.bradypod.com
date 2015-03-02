@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>hash算法在java中的应用-树懒博客-BradyPod's Blog</title>
+  <meta name="description" content="树懒博客；BradyPod's Blog;89后，工作在广州；Java程序员。">
+  <meta name="keywords" content="java, linux, shell, nginx, lua, mysql, memcached, redis">
+  <meta name="author" content="bradypod">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="favicon.ico" type="image/ico" rel="icon">
+  <link href="favicon.ico" type="image/ico" rel="shortcut icon">
+
+  <link rel="canonical" href="http://blog.bradypod.com/">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css" media="all">
+  <link rel="stylesheet" href="/static/css/font-awesome.min.css" media="all">
+  <link rel="stylesheet" href="/static/css/style.css" media="all">
+  <link rel="stylesheet" href="/static/css/desert.css" media="all">
+ </head>
+<body onload="prettyPrint()">
+	<div class="container">
+
+    <header class="header">
+      <div class="title"><a title="bradypod's blog" href="/">BradyPod's blog</a></div>
+      <ul class="nav navbar-nav navbar-right visible-lg visible-md">
+        <li>
+          <form id="search-form" class="form-group has-success visible-lg" role="form">
+            <input type="text" class="form-control input-sm" placeholder="Search" id="query" style="width: 110px;">
+          </form>
+        </li>
+        <li><a href="https://github.com/JumperYu" title="我的github主页"><i class="icon-github"></i> github</a></li>
+        <li><a href="http://weibo.com/javaserverfaces/home?wvr=5" title="我的微博主页"><i class="icon-pinterest-sign"></i> weibo</a></li>
+        <li><a href="index.html" title="联系我"><i class="icon-phone"></i> telphone</a></li>
+      </ul>
+    </header>
+    <div class="wrapper">
+		<div class="row">
+        <div class="col-md-12">
+          <article class="news-item">
+  		    <h2>hash算法在java中的应用<small> 2015.03.02</small></h2>
+  		    </aritcle>
+<div>
+<pre class="prettyprint">
+1、为什么要有Hash算法
+
+Java中的集合有两类，一类是List，一类是Set。List内的元素是有序的，元素可以重复。Set元素无序，但元素不可重复。要想保证元素不重复，两个元素是否重复应该依据什么来判断呢？用Object.equals方法。但若每增加一个元素就检查一次，那么当元素很多时，后添加到集合中的元素比较的次数就非常多了。也就是说若集合中已有1000个元素，那么第1001个元素加入集合时，它就要调用1000次equals方法。这显然会大大降低效率。于是Java采用了哈希表的原理。哈希(Hash)是个人名，由于他提出哈希算法的概念就以他的名字命名了。
+</pre> 
+</div><!-- end pretty div -->
+
+        </div><!-- end col md 12 div -->
+    </div><!-- end row -->
+    </div><!-- end wrapper -->
+    <footer class="footer text-center">
+        <p>&copy; 2014-2016 <a href="/" target="_blank" title="89后，工作在广州；Java程序员">bradypod's blog</a>.
+
+        <span style="float:right;"><a href="/about.html">关于</a></span>
+    
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254122988'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/z_stat.php%3Fid%3D1254122988' type='text/javascript'%3E%3C/script%3E"));</script>
+        </p>
+
+        <div style="display: block;" id="toTop">
+          <a href="#" title="火箭"><i class="icon-arrow-up"></i></a><a href="#footer" title="火箭"><i class="icon-arrow-down"></i></a>
+        </div>
+    </footer>
+    </div><!-- end container -->
+
+  <script type="text/javascript">
+    
+    /*入口*/
+   (function(){
+    
+    })();
+  </script>
+
+	<script src="/static/js/jquery.min.js"></script>
+	<script src="/static/js/bootstrap.min.js"></script>
+	<script src="/static/js/prettify.js"></script>
+	<script src="/static/js/core.js"></script>
+</body>
+</html>
