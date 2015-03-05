@@ -72,6 +72,8 @@ shell> useradd  -r -g mysql -s /sbin/nologin mysql
 shell> chown -R mysql .   #  递归更改文件所有者  change owner
 shell> chgrp -R mysql .   #  递归更改文件所有组  change group
 shell> scripts/mysql_install_db --user=mysql  # 执行注册安装 如果不报错执行下一步
+shell> chown -R root .
+shell> chown -R mysql data
 # mysqld_safe是一个shell 脚本，会调用mysqld启动mysql服务器，并监听服务器。脚本，会调用mysqld启动mysql服务器，并监听服务器。 如果mysqld进程异常终止，mysqld_safe将自动重启mysqld
 shell> bin/mysqld_safe --user=mysql &    
 shell> bin/mysqladmin -uroot password  # 可以定义root密码
@@ -118,6 +120,18 @@ shell> whereis mysql   # 执行完这个看不到一堆目录 说明你干掉他
 shell> find / -name mysql # 最暴力无脑
 shell> rm -rf 所有找到的... #  最好不要直接这样干 起码执行了上面几个步骤先 可以理解为在windows你不清空注册表 直接删掉了office程序 (:(:
 shell> rm -rf /etc/my.cnf  # 记得把这个删掉 不然各种莫名其妙
+  </pre>
+  2) 遇到install正常，无其他错误， 但是一直无法启动， 那么最好检查下err文件， 逐行检查， 注意[error]级别的；
+  我曾经遇到innodb内存分配不足的问题，原因是我的机器只有512M内存，然后默认初始化需要128M
+  <pre class="prettyprint">
+InnoDB: mmap(68681728 bytes) failed; errno 12
+2015-03-06 03:24:01 5808 [ERROR] InnoDB: Cannot allocate memory for the buffer pool
+2015-03-06 03:24:01 5808 [ERROR] Plugin 'InnoDB' init function returned error.
+2015-03-06 03:24:01 5808 [ERROR] Plugin 'InnoDB' registration as a STORAGE ENGINE failed.
+2015-03-06 03:24:01 5808 [ERROR] Unknown/unsupported storage engine: InnoDB
+2015-03-06 03:24:01 5808 [ERROR] Aborting
+修改my.cnf
+innodb_buffer_pool_size = 8M # 依据自身的内存定
   </pre>
 </p> 
 </div><!-- end pretty div -->
