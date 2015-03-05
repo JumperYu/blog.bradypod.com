@@ -65,17 +65,25 @@ shell> cd /usr/local/src   # 一般这里放源码
 shell> wget http://dev.mysql.com/get/Downloads/MySQL-5.6/mysql-5.6.23-linux-glibc2.5-x86_64.tar.gz/from/http://cdn.mysql.com/
 shell> tar zxvf mysql-5.6.23-linux-glibc2.5-x86_64.tar.gz   # 解压
 shell> cd mysql-5.6.23-linux-glibc2.5-x86_64
-shell> ln -s /usr/local/src/mysql-5.6.23-linux-glibc2.5-x86_64 mysql   #定义一个快捷方式到别的地方
-shell> cd mysql      # 注意路径的切换 下面的命令都是绝对路径
-shell> scripts/mysql_install_db --user=mysql  # 基本的注册安装 
-shell> bin/mysqld_safe --user=mysql &     # 后台启动它
+shell> ln -s /usr/local/src/mysql-5.6.23-linux-glibc2.5-x86_64 /usr/local/mysql   #定义一个快捷方式到别的地方
+shell> cd /usr/local/mysql      # 注意路径的切换 下面的命令都是绝对路径
+shell> groupadd mysql              #  为了使mysql低权限运行 更安全 我们创建一个mysql用户组
+shell> useradd  -r -g mysql -s /sbin/nologin mysql
+shell> chown -R mysql .   #  递归更改文件所有者  change owner
+shell> chgrp -R mysql .   #  递归更改文件所有组  change group
+shell> scripts/mysql_install_db --user=mysql  # 执行注册安装 如果不报错执行下一步
+# mysqld_safe是一个shell 脚本，会调用mysqld启动mysql服务器，并监听服务器。脚本，会调用mysqld启动mysql服务器，并监听服务器。 如果mysqld进程异常终止，mysqld_safe将自动重启mysqld
+shell> bin/mysqld_safe --user=mysql &    
 shell> bin/mysqladmin -uroot password  # 可以定义root密码
-shell> cp support-files/mysql.server /etc/init.d/mysql.server(你也可以改为其他名字)    # 为了方便再弄几个快捷方式
-shell> service mysql.server  stop | start | restart  # 这样就不用记路径了
+# mysql.server为一个shell脚本，他会调用mysqld_safe，该脚本会读取配置文件的[mysql.server]以及[mysqld]选项。
+# 官方建议使用这种方式启动mysqld服务器， 因为当mysqld异常终止的使用， 脚本会重启mysqld服务器
+shell> cp support-files/mysql.server /etc/init.d/mysql.server   
+shell> service mysql.server stop | start | restart  # 这样就不用记路径了
+# 为了方便再弄几个快捷方式
 shell> echo $PATH   # 配置下环境变量
 shell> vim /etc/profile  
        # 暴力无解在最后一行输入
-       PATH=$PATH:/usr/local/mysql/bin     # 即源码目录下的bin目录
+       PATH=$PATH:/usr/local/mysql/bin     # 把mysql目录下的bin路径加入环境变量
 shell> source /etc/profile    # 刷新下
 shell> mysql -p   # 这个时候快捷方式就可以像以前那样用了
   </pre> 
@@ -99,7 +107,7 @@ mysql> select version();  -- 看下版本号
   1）如果你和我一样已经安装过5.1或者<5.6， 现在想尝试玩下5.6， 那么你肯定会遇到卸载的问题
   首先停掉它(service mysqld stop)， 如果是别的从主机的master， 记得先去slave那执行(stop slave);
 </p> 
-  2）几种卸载方式，不全
+  几种卸载方式，不全
    <pre class="prettyprint">
 shell> yum remove mysql-xxx
 shell> rpm -qa | grep -i mysql  # 列出所有带mysql的安装
