@@ -38,9 +38,19 @@
 		<div class="row">
         <div class="col-md-12">
           <article class="news-item">
-  		    <h2>mysql主从架构设计 - master&slave<small> 2015.02.24</small></h2>
+  		    <h2>基于mysql主从复制的mysql架构<small> 2015.02.24</small></h2>
   		    </aritcle>
 <div>
+<p>
+  当业务上升到一定级别的时候， 我们总是避免不了要做容灾， 避免各个环节出现单点故障。 数据库DB这个环节， 则是更为重要，
+  mysql 5.x开始， 主从复制是一个可以让我们实现高可用性架构的方案。
+</p>
+<p>
+  mysql复制原理
+  1)   master将改变记录到二进制日志(binary log)中（这些记录叫做二进制日志事件，binary logevents）；
+  2)   slave将master的binary log events拷贝到它的中继日志(relay log)；
+  3)   slave重做中继日志中的事件，将改变反映它自己的数据。 
+</p>
 <pre class="prettyprint">
 1 配置master和slave的my.ini
 [mysqld]
