@@ -72,8 +72,7 @@ shell> useradd  -r -g mysql -s /sbin/nologin mysql
 shell> chown -R mysql .   #  递归更改文件所有者  change owner
 shell> chgrp -R mysql .   #  递归更改文件所有组  change group
 shell> scripts/mysql_install_db --user=mysql  # 执行注册安装 如果不报错执行下一步
-shell> chown -R root .
-shell> chown -R mysql data
+shell> chown -R mysql data  # 这步可以省略
 # mysqld_safe是一个shell 脚本，会调用mysqld启动mysql服务器，并监听服务器。脚本，会调用mysqld启动mysql服务器，并监听服务器。 如果mysqld进程异常终止，mysqld_safe将自动重启mysqld
 shell> bin/mysqld_safe --user=mysql &    
 shell> bin/mysqladmin -uroot password  # 可以定义root密码

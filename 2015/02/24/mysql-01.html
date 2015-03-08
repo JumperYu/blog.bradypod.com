@@ -64,10 +64,13 @@
 [mysqld]
 log-bin=mysql-bin
 server-id=141  #可以以当前机器ip最后一段命名，保证各自唯一即可
-binlog-ignore-db=mysql
-binlog-ignore-db=test
-binlog-ignore-db=information_schema
-binlog-ignore-db=performance_schema  # 设置复制需忽略的数据库
+binlog-do-db = cphoto # 需要记录日志的数据库
+binlog-ignore-db = mysql,test,information_schema,performance_schema  # 可以按逗号分隔， 也可以写多个
+replicate-do-db = cphoto # 需要复制的数据库
+replicate-ignore-db = mysql,test,information_schema,performance_schema # 可以按逗号分隔， 也可以写多个
+#relay_log = /usr/local/mysql/mysql-relay-bin
+log_slave_updates = 1 # 从库的更新也记录到日志
+#read_only = 1   # 从库可以人为的加上这个值
 ...
 service mysqld restart #各自重启不报错即可
 
@@ -122,7 +125,8 @@ master - slaves - slaves - ..
 master - master - slaves - ..
 级别架构可以根据自己系统的实际情况选择
 
-ps : 下次再更新
+4 疑问
+
 </pre> 
 </div><!-- end pretty div -->
 
