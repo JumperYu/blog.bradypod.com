@@ -100,6 +100,12 @@ mysql> flush privileges;   # 刷新权限
 mysql> select user,host from mysql.user; # 可以看到新建的用户
 互相测试下, 都能连接和操作证明正常了
 shell> mysql -h对面的ip -u replication -p
+-- 数据库导入导出
+导出我选择用mysqldump，如果数据库太大，建议用gzip压缩
+mysqldump -p db_name | gzip > db_name.gz
+导入如果没用gzip压缩就直接source就行了, 数据库记得先创建
+mysql>create database db_name; 
+shell>gunzip < db_name.gz | mysql db_name
 
 3 主从架构选择
 3.1 master - slaves
@@ -115,13 +121,6 @@ shell> mysql -h对面的ip -u replication -p
 master - slaves - slaves - ..
 master - master - slaves - ..
 级别架构可以根据自己系统的实际情况选择
-
--- 数据库导入导出
-导出我选择用mysqldump，如果数据库太大，建议用gzip压缩
-mysqldump -p db_name | gzip > db_name.gz
-导入如果没用gzip压缩就直接source就行了, 数据库记得先创建
-mysql>create database db_name; 
-shell>gunzip < db_name.gz | mysql db_name
 
 ps : 下次再更新
 </pre> 
