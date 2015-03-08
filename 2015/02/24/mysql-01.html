@@ -64,8 +64,12 @@
 [mysqld]
 log-bin=mysql-bin
 server-id=141  #可以以当前机器ip最后一段命名，保证各自唯一即可
+binlog-ignore-db=mysql
+binlog-ignore-db=test
+binlog-ignore-db=information_schema
+binlog-ignore-db=performance_schema  # 设置复制需忽略的数据库
 ...
-mysqld restart #各自重启不报错即可
+service mysqld restart #各自重启不报错即可
 
 2 启动主从
 2.1 登陆主服务器mysql
@@ -88,6 +92,14 @@ Slave_SQL_Running: Yes
 ...
 
 如果看到两个Yes，则证明配置没有问题，主从已经配置完成。当然你可能没那么顺利，会遇到类似授权问题，导入导出等问题。
+PS: 如果两台机的mysql还不互通，应该先执行grant语句赋权；如果不想使用root账号， 可以新建一个账号。
+shell> mysql -u root -p  # root用户登陆
+mysql> create user 'replication'@'允许用户在哪个ip登陆' identified by '密码';    # 创建个账号
+mysql> grant replication slave on *.* to 'replication'@'ip' identified by '密码'; # 设置权限级别 *.*任何数据库和表
+mysql> flush privileges;   # 刷新权限
+mysql> select user,host from mysql.user; # 可以看到新建的用户
+互相测试下, 都能连接和操作证明正常了
+shell> mysql -h对面的ip -u replication -p
 
 3 主从架构选择
 3.1 master - slaves
