@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>java.concurrent-java线程池-树懒博客-BradyPod's Blog</title>
+  <meta name="description" content="树懒博客；BradyPod's Blog;89后，工作在广州；Java程序员。">
+  <meta name="keywords" content="java, linux, shell, nginx, lua, mysql, memcached, redis">
+  <meta name="author" content="bradypod">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="favicon.ico" type="image/ico" rel="icon">
+  <link href="favicon.ico" type="image/ico" rel="shortcut icon">
+
+  <link rel="canonical" href="http://blog.bradypod.com/">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css" media="all">
+  <link rel="stylesheet" href="/static/css/font-awesome.min.css" media="all">
+  <link rel="stylesheet" href="/static/css/style.css" media="all">
+  <link rel="stylesheet" href="/static/css/desert.css" media="all">
+ </head>
+<body onload="prettyPrint()">
+	<div class="container">
+
+    <header class="header">
+      <div class="title"><a title="bradypod's blog" href="/">BradyPod's blog</a></div>
+      <ul class="nav navbar-nav navbar-right visible-lg visible-md">
+        <li>
+          <form id="search-form" class="form-group has-success visible-lg" role="form">
+            <input type="text" class="form-control input-sm" placeholder="Search" id="query" style="width: 110px;">
+          </form>
+        </li>
+        <li><a href="https://github.com/JumperYu" title="我的github主页"><i class="icon-github"></i> github</a></li>
+        <li><a href="http://weibo.com/javaserverfaces/home?wvr=5" title="我的微博主页"><i class="icon-pinterest-sign"></i> weibo</a></li>
+        <li><a href="index.html" title="联系我"><i class="icon-phone"></i> telphone</a></li>
+      </ul>
+    </header>
+    <div class="wrapper">
+		<div class="row">
+        <div class="col-md-12">
+          <article class="news-item">
+  		    <h2>java concurrent包 - 线程池<small> 2015.03.11</small></h2>
+  		    </aritcle>
+<div>
+<p>
+ java.util.concurrent工具包可以简化并发程序的开发, 减少竞争条件和死锁线程，为我们提供了更实用的并发程序模型。
+</p>
+<p>
+<b>1) newFixedThreadPool（固定大小线程池）</b><br/>
+创建一个可重用固定线程集合的线程池，以共享的无界队列方式来运行这些线程（只要有请求过来，就会在一个队列里等待执行）。如果在当前线程执行期间由于失败而导致线程终止，那么一个新线程将代替继续执行。 
+</p>
+<p>
+<b>2) newCachedThreadPool（无界线程池，可以进行自动线程回收）</b><br/>
+创建一个可根据需要创建新线程的线程池，但是在以前构造的线程可用时将重用它们。对于执行很多短期异步任务的程序而言，这些线程池通常可提高程序性能。调用 execute 将重用以前构造的线程（如果线程可用）。如果现有线程没有可用的，则创建一个新线程并添加到池中。终止并从缓存中移除那些已有 60 秒钟未被使用的线程。因此，长时间保持空闲的线程池不会使用任何资源。注意，可以使用 ThreadPoolExecutor 构造方法创建具有类似属性但细节不同（例如超时参数）的线程池。
+</p>
+<p>
+<b>3) newSingleThreadExecutor（单个后台线程）</b><br/>
+创建一个使用单个 worker 线程的Executor，以无界队列方式来运行该线程。（注意，如果因为在关闭前的执行期间出现失败而终止了此单个线程，那么如果需要，一个新线程将代替它执行 后续的任务）。可保证顺序地执行各个任务，并且在任意给定的时间不会有多个线程是活动的。与其他等效的 newFixedThreadPool(1) 不同，可保证无需重新配置此方法所返回的执行程序即可使用其他的线程。
+这些方法返回的都是ExecutorService对象，这个对象可以理解为就是一个线程池。
+这个线程池的功能还是比较完善的。可以提交任务submit()可以结束线程池shutdown()。 
+</p>
+<p>
+  
+  <pre class="prettyprint">
+
+  </pre>
+</p>
+<p>
+  
+  <pre class="prettyprint">
+
+  </pre>
+</p>
+</div><!-- end pretty div -->
+
+        </div><!-- end col md 12 div -->
+    </div><!-- end row -->
+    </div><!-- end wrapper -->
+    <footer class="footer text-center">
+        <p>&copy; 2014-2016 <a href="/" target="_blank" title="89后，工作在广州；Java程序员">bradypod's blog</a>.
+
+        <span style="float:right;"><a href="/about.html">关于</a></span>
+    
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254122988'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/z_stat.php%3Fid%3D1254122988' type='text/javascript'%3E%3C/script%3E"));</script>
+        </p>
+
+        <div style="display: block;" id="toTop">
+          <a href="#" title="火箭"><i class="icon-arrow-up"></i></a><a href="#footer" title="火箭"><i class="icon-arrow-down"></i></a>
+        </div>
+    </footer>
+    </div><!-- end container -->
+
+  <script type="text/javascript">
+    
+    /*入口*/
+   (function(){
+    
+    })();
+  </script>
+
+	<script src="/static/js/jquery.min.js"></script>
+	<script src="/static/js/bootstrap.min.js"></script>
+	<script src="/static/js/prettify.js"></script>
+	<script src="/static/js/core.js"></script>
+</body>
+</html>
