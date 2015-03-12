@@ -93,7 +93,7 @@ mysql> show slave status \G;
 Slave_IO_Running: Yes
 Slave_SQL_Running: Yes
 ...
-
+s
 如果看到两个Yes，则证明配置没有问题，主从已经配置完成。当然你可能没那么顺利，会遇到类似授权问题，导入导出等问题。
 PS: 如果两台机的mysql还不互通，应该先执行grant语句赋权；如果不想使用root账号， 可以新建一个账号。
 shell> mysql -u root -p  # root用户登陆
@@ -108,7 +108,7 @@ shell> mysql -h对面的ip -u replication -p
 mysqldump -p db_name | gzip > db_name.gz
 导入如果没用gzip压缩就直接source就行了, 数据库记得先创建
 mysql>create database db_name; 
-shell>gunzip < db_name.gz | mysql db_name
+shell>gunzip < db_name.gz | myql db_name
 
 3 主从架构选择
 3.1 master - slaves
