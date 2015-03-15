@@ -139,7 +139,12 @@
         });
 
         Chat.initialize = function() {
-            Chat.host = 'ws://' + window.location.host + ':8080/webchat/test';
+            console.log(window.location.protocol);
+            if (window.location.protocol == 'http:') {
+                Chat.host = 'ws://' + window.location.host + ':8080/webchat/chat';
+            } else {
+                Chat.host = 'wss://' + window.location.host + ':8080/webchat/chat';
+            }
             Chat.connect();
         };
 
