@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>tomcat编译jsvc脚本-树懒博客-BradyPod's Blog</title>
+  <meta name="description" content="树懒博客；BradyPod's Blog;89后，工作在广州；Java程序员。">
+  <meta name="keywords" content="java, linux, shell, nginx, lua, mysql, memcached, redis">
+  <meta name="author" content="bradypod">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="favicon.ico" type="image/ico" rel="icon">
+  <link href="favicon.ico" type="image/ico" rel="shortcut icon">
+
+  <link rel="canonical" href="http://blog.bradypod.com/">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css" media="all">
+  <link rel="stylesheet" href="/static/css/font-awesome.min.css" media="all">
+  <link rel="stylesheet" href="/static/css/style.css" media="all">
+  <link rel="stylesheet" href="/static/css/desert.css" media="all">
+ </head>
+<body onload="prettyPrint()">
+	<div class="container">
+
+    <header class="header">
+      <div class="title"><a title="bradypod's blog" href="/">BradyPod's blog</a></div>
+      <ul class="nav navbar-nav navbar-right visible-lg visible-md">
+        <li>
+          <form id="search-form" class="form-group has-success visible-lg" role="form">
+            <input type="text" class="form-control input-sm" placeholder="Search" id="query" style="width: 110px;">
+          </form>
+        </li>
+        <li><a href="https://github.com/JumperYu" title="我的github主页"><i class="icon-github"></i> github</a></li>
+        <li><a href="http://weibo.com/javaserverfaces/home?wvr=5" title="我的微博主页"><i class="icon-pinterest-sign"></i> weibo</a></li>
+        <li><a href="index.html" title="联系我"><i class="icon-phone"></i> telphone</a></li>
+      </ul>
+    </header>
+    <div class="wrapper">
+		<div class="row">
+        <div class="col-md-12">
+          <article class="news-item">
+  		    <h2>tomcat编译jsvc脚本<small> 2015.03.17</small></h2>
+  		    </aritcle>
+<div>
+<p>
+    直接看程序吧, 不编译这个脚本也是可以的， 可以直接使用startup.sh、shutdown.sh、catalina.sh run等脚本也是可以控制tomcat的。
+    <a href="http://tomcat.apache.org/tomcat-7.0-doc/setup.html" target="_blank">jsvc编译步骤原文</a>
+    下面是我的步骤
+</p>
+<p>
+  <pre class="prettyprint">
+# 1.配置路径 为了方便 如果已经配置就不用了
+shell>vim /etc/profile
+JAVA_HOME=/usr/local/service/jdk1.7.0_71
+PATH=$PATH:$JAVA_HOME/bin
+CLASSPATH=$CLASSPATH:$JAVA_HOME/jre/lib:$JAVA_HOME/lib/tools.jar
+CATALINA_HOME=/usr/local/service/apache-tomcat-7.0.59
+CATALINA_BASE=$CATALINA_HOME
+:wq # 退出来
+shell>source /etc/profile  # 刷新
+
+# 2.检查路径
+shell>java -version  # 检查jdk
+shell>$CATALINA_HOME/bin/startup.sh # 检查tomcat
+
+# 3.编译
+shell>cd $CATALINA_HOME/bin
+shell>tar zxf commons-daemon-native.tar.gz
+shell>cd commons-daemon-1.x.xx-native-src/unix  # xx 根据具体而定
+shell>./configure
+shell>make       # 确保自己有gcc, 编译完该目录下回生成一个jsvc的程序
+shell>cp jsvc ../..  # 放到bin目录下去
+shell>cd ../..       # 切到bin目录
+shell>cd $CATALINA_HOME
+# 下面就是jsvc的调用方式, 官方提供了个daemon.sh作为模板
+shell>./bin/jsvc \
+  -classpath $CATALINA_HOME/bin/bootstrap.jar:$CATALINA_HOME/bin/tomcat-juli.jar \
+  -outfile $CATALINA_BASE/logs/catalina.out \
+  -errfile $CATALINA_BASE/logs/catalina.err \
+  -Dcatalina.home=$CATALINA_HOME \
+  -Dcatalina.base=$CATALINA_BASE \
+  -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager \
+  -Djava.util.logging.config.file=$CATALINA_BASE/conf/logging.properties \
+  org.apache.catalina.startup.Bootstrap
+# ps -ef | grep jsvc  and  kill it all
+
+# daemon.sh我看的有点乱懒得看了, 就用自己一直在用的了, 我把脚本贴出来
+# sh jsvc.sh start | stop | restart
+
+#!/bin/sh
+#
+# start up tomcat for daemon
+#
+# @author zengxm
+# @version 1.0.1
+# @date 2014-12-05
+
+JSVC_NAME='jsvc'
+PID_FILE=/usr/local/service/$JSVC_NAME.pid
+JAVA_HOME='/usr/local/service/jdk1.7.0_71/'
+CATALINA_HOME='/usr/local/service/apache-tomcat-7.0.59/'
+DAEMON_HOME=$CATALINA_HOME/bin/jsvc
+TMP_DIR='/var/tmp'
+OUT_FILE=$CATALINA_HOME/logs/catalina.out
+ERR_FILE=$CATALINA_HOME/logs/catalina.err
+CLASSPATH=\
+$JAVA_HOME/lib/tools.jar:\
+$CATALINA_HOME/bin/commons-daemon.jar:\
+$CATALINA_HOME/bin/bootstrap.jar:\
+$CATALINA_HOME/bin/tomcat-juli.jar
+JAVA_OPTS='-Xms128m -Xmx128m -XX:+UseConcMarkSweepGC -XX:MaxNewSize=64m -XX:MaxPermSize=64m'
+TOMCAT_USER="root"
+
+RETVAL=0
+export LANG=en_US.UTF-8
+# start and stop functions
+start() {
+  #  echo -n "Starting tomcat: "
+  #  chown -R $TOMCAT_USER:$TOMCAT_USER /home/tomcat/*
+    $DAEMON_HOME \
+    -user $TOMCAT_USER \
+    -home $JAVA_HOME \
+    -pidfile $PID_FILE \
+    -Dcatalina.home=$CATALINA_HOME \
+    -Djava.io.tmpdir=$TMP_DIR \
+    -Djava.awt.headless=true \
+    -outfile $OUT_FILE \
+    -errfile $ERR_FILE \
+    $JAVA_OPTS \
+    -cp $CLASSPATH \
+    org.apache.catalina.startup.Bootstrap
+    # To get a verbose JVM
+    #-verbose \
+    # To get a debug of jsvc.
+    #-debug \
+    sleep 1 
+    PID=`ps aux | grep $JSVC_NAME |grep $CATALINA_HOME | grep -v "grep" | awk '{print $2}'`
+    if [ -n "$PID" ]
+    then
+        echo "Starting tomcat success"
+    else
+        echo "Starting tomcat failed"
+        exit 1
+    fi
+    RETVAL=$?
+        echo 
+#    [ $RETVAL = 0 ] &&  echo "tomcat is start"
+    return $RETVAL
+}
+
+stop() {
+   
+    PID=`ps aux | grep $JSVC_NAME |grep $CATALINA_HOME | grep -v "grep" | awk '{print $2}'`
+    kill -9 $PID
+    #rm -rf $CATALINA_HOME/logs/*
+    rm -rf $CATALINA_HOME/work/*
+    PID=`ps aux | grep $JSVC_NAME |grep $CATALINA_HOME | grep -v "grep" | awk '{print $2}'`
+    if [ -n "$PID" ]
+    then       
+     echo "Stoping tomcat fail"   
+    else       
+   echo "Stoping tomcat success"        
+    fi
+}
+
+# See how we were called.
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  restart)
+        stop
+        # Ugly hack
+        # We should really make sure tomcat
+        # is stopped before leaving stop
+        sleep 3 
+        start
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+esac
+
+exit $RETVAL
+
+  </pre>
+</p>
+</div><!-- end pretty div -->
+
+        </div><!-- end col md 12 div -->
+    </div><!-- end row -->
+    </div><!-- end wrapper -->
+    <footer class="footer text-center">
+        <p>&copy; 2014-2016 <a href="/" target="_blank" title="89后，工作在广州；Java程序员">bradypod's blog</a>.
+
+        <span style="float:right;"><a href="/about.html">关于</a></span>
+    
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254122988'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/z_stat.php%3Fid%3D1254122988' type='text/javascript'%3E%3C/script%3E"));</script>
+        </p>
+
+        <div style="display: block;" id="toTop">
+          <a href="#" title="火箭"><i class="icon-arrow-up"></i></a><a href="#footer" title="火箭"><i class="icon-arrow-down"></i></a>
+        </div>
+    </footer>
+    </div><!-- end container -->
+
+  <script type="text/javascript">
+    
+    /*入口*/
+   (function(){
+    
+    })();
+  </script>
+
+	<script src="/static/js/jquery.min.js"></script>
+	<script src="/static/js/bootstrap.min.js"></script>
+	<script src="/static/js/prettify.js"></script>
+	<script src="/static/js/core.js"></script>
+</body>
+</html>
