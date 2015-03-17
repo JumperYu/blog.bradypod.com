@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>html5 WebSocket实时聊天-树懒博客-BradyPod's Blog</title>
+  <title>【html5】WebSocket实时聊天-树懒博客-BradyPod's Blog</title>
   <meta name="description" content="树懒博客；BradyPod's Blog;89后，工作在广州；Java程序员。">
   <meta name="keywords" content="java, linux, shell, nginx, lua, mysql, memcached, redis">
   <meta name="author" content="bradypod">
@@ -68,7 +68,25 @@
   		    </aritcle>
 <div>
 <p>
-    
+    html5的websocket允许浏览器可以和服务器简历类似于tcp的长连接请求，在此之前我们只能够通过轮询等其他手段实现；
+    JavaEE 7包含了websocket服务端的标准API，同时tomcat、jetty都提供了对应的实现，还有nginx也行。我采用tomcat作为服务端，
+    在我写这篇文章的时候， tomcat-7.0.59正好更新， 同时在7系列也实现了这套标准， 不然你得用tomcat-8.x。在它的lib目录，
+    包含了webcoket-api.jar、tomcat7-websocket.jar。
+</p>
+<p>
+    <b>***下次再更新具体内容</b>
+</p>
+<p>
+    客户端代码
+</p>
+<p>
+  <pre class="prettyprint">
+if(WebSocket in window) // support websocket
+var ws = new WebSocket("ws://112.124.126.31:8080/webchat/websocket/chat");
+ws.onopen = function(){// alert connect};
+ws.onmessage = function(event){// alert event.data};
+ws.onclose = function(){// alert close};
+  </pre>
 </p>
 <noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websockets rely on Javascript being enabled. Please enable
     Javascript and reload this page!</h2></noscript>
@@ -141,9 +159,10 @@
         Chat.initialize = function() {
             console.log(window.location.protocol);
             if (window.location.protocol == 'http:') {
-                Chat.host = 'ws://' + window.location.host + ':8080/webchat/chat';
+                //Chat.host = 'ws://' + window.location.host + ':8080/webchat/websocket/chat';
+                Chat.host = 'ws://112.124.126.31:8080/webchat/websocket/chat';
             } else {
-                Chat.host = 'wss://' + window.location.host + ':8080/webchat/chat';
+                Chat.host = 'wss://112.124.126.31:8080/webchat/websocket/chat';
             }
             Chat.connect();
         };
@@ -158,11 +177,11 @@
 
         Chat.reconnect = (function() {
           if(!Chat.socket || !Chat.host) {
-            Console.log("info: 由于系统参数错误, 无法进行重连");
+            Console.log("*由于系统参数错误, 无法进行重连");
             return false;
           }
           if(Chat.socket.readyState == 1) {
-            Console.log("info: 你已经连接上服务器");
+            Console.log("*你已经连接上服务器");
             return false;
           }
           if(Chat.socket.readyState == 3) {
