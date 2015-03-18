@@ -107,7 +107,8 @@ $JAVA_HOME/lib/tools.jar:\
 $CATALINA_HOME/bin/commons-daemon.jar:\
 $CATALINA_HOME/bin/bootstrap.jar:\
 $CATALINA_HOME/bin/tomcat-juli.jar
-JAVA_OPTS='-Xms128m -Xmx128m -XX:+UseConcMarkSweepGC -XX:MaxNewSize=64m -XX:MaxPermSize=64m'
+# 这个是针对我的512M内存的 如果内存足够应该加大 Xms、Xmx设置相等
+JAVA_OPTS='-Xms64m -Xmx256m -Xmn32m -XX:PermSize=32m -XX:MaxPermSize=32m -XX:SurvivorRatio=65536 -XX:MaxTenuringThreshold=0 -Xnoclassgc -XX:+DisableExplicitGC -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+UseCMSCompactAtFullCollection -XX:CMSFullGCsBeforeCompaction=0 -XX:+CMSClassUnloadingEnabled -XX:-CMSParallelRemarkEnabled -XX:CMSInitiatingOccupancyFraction=90 -XX:SoftRefLRUPolicyMSPerMB=0 -XX:+PrintClassHistogram -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintHeapAtGC -Xloggc:log/gc.log'
 TOMCAT_USER="root"
 
 RETVAL=0
