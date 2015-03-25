@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>tomcat的session复制集群-树懒博客-BradyPod's Blog</title>
+  <meta name="description" content="树懒博客；BradyPod's Blog;89后，工作在广州；Java程序员。">
+  <meta name="keywords" content="java, linux, shell, nginx, lua, mysql, memcached, redis">
+  <meta name="author" content="bradypod">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="favicon.ico" type="image/ico" rel="icon">
+  <link href="favicon.ico" type="image/ico" rel="shortcut icon">
+
+  <link rel="canonical" href="http://blog.bradypod.com/">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css" media="all">
+  <link rel="stylesheet" href="/static/css/font-awesome.min.css" media="all">
+  <link rel="stylesheet" href="/static/css/style.css" media="all">
+  <link rel="stylesheet" href="/static/css/desert.css" media="all">
+  <style type="text/css">
+
+  </style>
+ </head>
+<body onload="prettyPrint()">
+	<div class="container">
+
+    <header class="header">
+      <div class="title"><a title="bradypod's blog" href="/">BradyPod's blog</a></div>
+      <ul class="nav navbar-nav navbar-right visible-lg visible-md">
+        <li>
+          <form id="search-form" class="form-group has-success visible-lg" role="form">
+            <input type="text" class="form-control input-sm" placeholder="Search" id="query" style="width: 110px;">
+          </form>
+        </li>
+        <li><a href="https://github.com/JumperYu" title="我的github主页"><i class="icon-github"></i> github</a></li>
+        <li><a href="http://weibo.com/javaserverfaces/home?wvr=5" title="我的微博主页"><i class="icon-pinterest-sign"></i> weibo</a></li>
+        <li><a href="index.html" title="联系我"><i class="icon-phone"></i> telphone</a></li>
+      </ul>
+    </header>
+    <div class="wrapper">
+		<div class="row">
+        <div class="col-md-12">
+          <article class="news-item">
+  		    <h2>tomcat集群session复制 <small> 2015.03.24</small></h2>
+  		    </aritcle>
+<div>
+<p>
+    <b> Clustering/Session Replication</b> <a href="http://tomcat.apache.org/tomcat-7.0-doc/cluster-howto.html"><<官方说明文档>></a>
+    当我们为了使应用变得更高效的时候，肯定会走上单点运行的决策，那么节点的增加也同让带来了新的挑战，例如session的一致性的问题。
+
+</p>
+<p>
+  有几种解决方案：
+    <ol>
+      <li>使用nginx来做负载，选用hash IP一致性；（其实这样仍然是单点）</li>
+      <li>使用memcached中间件</li>
+      <li>使用tomcat的session replication</li>
+    </ol>
+</p>
+<p>
+  先看tomcat自有的session复制
+    <ol>
+      <li>DeltaManager ALL TO ALL模式，即每一个节点的session产生都会复制给其余几点， 所以当大于4个的时候已经很吃力了</li>
+      <li>BackupManager 可以配置备用节点，有点类似于双向热备， 缺点是官方说没有经过大型的测试验证</li>
+    </ol>
+</p>
+<p>
+  OK 下面是DeltaManager ALL TO ALL模式，我的测试用例是在同一台机器上
+  <pre class="prettyprint">
+shell>wget tomcat from web site    # 自行下载
+shell>tar zxf tomcat.tgz && cp -rf tomcat-1 tomcat-2  # 再拷贝一个
+shell>vim tomcat-2/conf/server.xml # 修改下端口 我习惯的加一减一
+# Server port="8006" shutdown="SHUTDOWN"
+# Connector port="8090" protocol="HTTP/1.1" connectionTimeout="20000" redirectPort="8443"
+# Connector port="8010" protocol="AJP/1.3" redirectPort="8443"
+shell>vim tomcat-1/conf/server.xml && vim tomcat-2/conf/server.xml
+# 修改Engine节点的Host节点，加入一个配置
+  </pre>
+</p>
+<pre class="prettyprint">
+&lt;Cluster className="org.apache.catalina.ha.tcp.SimpleTcpCluster" channelSendOptions="8"&gt;
+
+&lt;Manager className="org.apache.catalina.ha.session.DeltaManager"
+         expireSessionsOnShutdown="false"
+         notifyListenersOnReplication="true"/&gt;
+
+&lt;Channel className="org.apache.catalina.tribes.group.GroupChannel"&gt;
+  &lt;Membership className="org.apache.catalina.tribes.membership.McastService"
+              address="228.0.0.4"
+              port="45564"
+              frequency="500"
+              dropTime="3000"/&gt;
+  &lt;Receiver className="org.apache.catalina.tribes.transport.nio.NioReceiver"
+            address="auto"
+            port="4000"
+            autoBind="100"
+            selectorTimeout="5000"
+            maxThreads="6"/&gt;
+
+  &lt;Sender className="org.apache.catalina.tribes.transport.ReplicationTransmitter"&gt;
+    &lt;Transport className="org.apache.catalina.tribes.transport.nio.PooledParallelSender"/&gt;
+  &lt;/Sender&gt;
+  &lt;Interceptor className="org.apache.catalina.tribes.group.interceptors.TcpFailureDetector"/&gt;
+  &lt;Interceptor className="org.apache.catalina.tribes.group.interceptors.MessageDispatch15Interceptor"/&gt;
+&lt;/Channel&gt;
+
+&lt;Valve className="org.apache.catalina.ha.tcp.ReplicationValve"
+       filter=""/&gt;
+&lt;Valve className="org.apache.catalina.ha.session.JvmRouteBinderValve"/&gt;
+
+&lt;Deployer className="org.apache.catalina.ha.deploy.FarmWarDeployer"
+          tempDir="/tmp/war-temp/"
+          deployDir="/tmp/war-deploy/"
+          watchDir="/tmp/war-listen/"
+          watchEnabled="false"/&gt;
+
+&lt;ClusterListener className="org.apache.catalina.ha.session.JvmRouteSessionIDBinderListener"/&gt;
+&lt;ClusterListener className="org.apache.catalina.ha.session.ClusterSessionListener"/&gt;
+&lt;/Cluster&gt;
+</pre>
+<p>
+  加上如上配置后各自重启tomcat，我的测试端口是8080和8090端口，在同一个浏览器开两个窗口，分别访问两个端口，那么获取到的session如果
+  是一致的说明成功了。
+</p> 
+<p>
+
+</p>
+<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websockets rely on Javascript being enabled. Please enable
+    Javascript and reload this page!</h2></noscript>
+</div><!-- end pretty div -->
+
+        </div><!-- end col md 12 div -->
+    </div><!-- end row -->
+    </div><!-- end wrapper -->
+    <footer class="footer text-center">
+        <p>&copy; 2014-2016 <a href="/" target="_blank" title="89后，工作在广州；Java程序员">bradypod's blog</a>.
+
+        <span style="float:right;"><a href="/about.html">关于</a></span>
+    
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254122988'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/z_stat.php%3Fid%3D1254122988' type='text/javascript'%3E%3C/script%3E"));</script>
+        </p>
+
+        <div style="display: block;" id="toTop">
+          <a href="#" title="火箭"><i class="icon-arrow-up"></i></a><a href="#footer" title="火箭"><i class="icon-arrow-down"></i></a>
+        </div>
+    </footer>
+    </div><!-- end container -->
+
+  <script type="text/javascript">
+   /*入口*/
+   (function(){
+
+   })();
+  </script>
+
+	<script src="/static/js/jquery.min.js"></script>
+	<script src="/static/js/bootstrap.min.js"></script>
+	<script src="/static/js/prettify.js"></script>
+	<script src="/static/js/core.js"></script>
+  <script src="/static/js/websocket.js"></script>
+</body>
+</html>
