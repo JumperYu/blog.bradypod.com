@@ -42,14 +42,19 @@
           <p><h3>上一篇，实践了<a href="/2015/01/21/snake.html" target="_blank">《html5贪吃蛇》</a></h3></p>
   		    </aritcle>
 <div>
-<pre class="prettyprint lang-javascript linenums">
 
-</pre>
 </div><!-- end pretty div -->
           
-        <div id="myCanvas"><div>
+      <div class="mycanvas">
+            <canvas id="board">Your browser doesn't support Canvas</canvas>
+            <canvas id="timer"></canvas>
+            <canvas id="score"></canvas>
+            <canvas id="level"></canvas>
+            <canvas id="next-shape"></canvas>
+            <canvas id="high-score"></canvas>
+            <script src=""></script>
+      </div>
          
-
         </div><!-- end col md 12 div -->
     </div><!-- end row -->
     </div><!-- end wrapper -->
@@ -68,103 +73,45 @@
     </div><!-- end container -->
 
   <script type="text/javascript">
+    
     var KeyCode = {
       LEFT : 37,
       UP : 38,
       RIGHT : 39,
       DOWN : 40
     };
+
     function Tetris(rows, cols, cellWidth, cellHeight) {
-    this.ctx = null;
-    this.shap = {
-                Line : [[1,0,0,0], [1,0,0,0], [1,0,0,0], [1,0,0,0]], 
-                Less : [[1,0,0,0], [1,1,1,0], [0,0,0,0], [0,0,0,0]],
-                Zee : [[1,1,0,0], [0,1,1,0], [0,0,0,0], [0,0,0,0]],
-                Tian : [[1,1,0,0], [1,1,0,0], [0,0,0,0], [0,0,0,0]],
-                Tu : [[0,1,0,0], [1,1,1,0], [0,0,0,0], [0,0,0,0]]
-    };
-    this.grid = [];  // 所有格子状态
-    this.current = [];        // 所有方块格子状态
-    this.thread = null;       // 当前线程
-    this.play = function() {
-      if(this.check()) {
-        clearInterval(this.thread);
-      }// 检测
-      this.ctx.clearRect(0, 0, 500, 500);
-      for(var i = 0; i < this.current.length; i++) {
-        for(var j = 0; j < this.current[i].length; j++) {
-          if(this.current[i][j] == 1) {
-            this.ctx.fillStyle = "rgb(255,165,0)";
-            this.ctx.fillRect(j * cellHeight, i * cellWidth, cellWidth, cellHeight);
+      this.init = function () {
+        // 初始化
+        var _div = document.getElementById("myCanvas");
+        var _canvas = document.createElement("canvas");
+        _div.appendChild(_canvas);
+        _canvas.width = cols * cellWidth;
+        _canvas.height = rows * cellHeight;
+        _canvas.style.border = "1px solid black";
+        this.ctx = _canvas.getContext("2d");
+        this.shap = [[0,1,0,0], [1,1,1,0], [0,0,0,0], [0,0,0,0]];
+        for(var i = 0; i < this.shap.length; i++) {
+          for(var j = 0; j < this.shap[i].length; j++) {
+            if(this.shap[i][j] == 1) {
+              this.ctx.fillStyle = "rgb(255,165,0)";
+              this.ctx.fillRect(j * cellHeight, i * cellWidth, cellWidth, cellHeight);
+            }
           }
-        }
-      }// --> end of draw this.current
-      this.current.unshift([0,0,0,0]);
+        }// --> end of draw this.shap
+      };//-- end init canvas
     };
-    this.check = function() {
-      len = this.current[this.current.length - 1].length ;
-      if(len < 4 && len < cols)
-        return true;
-      else
-        return false;
-    };
-    this.init = function () {
-      // 初始化
-      this.current = this.shap.Tu;
-      var _div = document.getElementById("myCanvas");
-      var _canvas = document.createElement("canvas");
-      _div.appendChild(_canvas);
-      _canvas.width = cols * cellWidth;
-      _canvas.height = rows * cellHeight;
-      _canvas.style.border = "1px solid black";
-      this.ctx = _canvas.getContext("2d");
-      this.ctx.beginPath();
-      // 画横线
-      for(var i = 1; i < rows; i++) {
-        this.ctx.moveTo(0, cellHeight * i);
-        this.ctx.lineTo(cellHeight * cols, cellHeight * i);
-        // 初始化X轴
-        this.grid.push(new Array());
-        // 画竖线
-        for(var j = 1; j < cols; j++) {
-          this.ctx.moveTo(cellWidth * j, 0);
-          this.ctx.lineTo(cellWidth * j, cellWidth * rows);
-          // 初始化Y轴
-          this.grid[i - 1][j - 1] = 0;
-        }
-      }
-      this.ctx.closePath();
-      this.ctx.strokeStyle = "#aaa";
-      this.ctx.lineWidth = 0.3;
-      this.ctx.stroke();
-    };//-- end init canvas
-    this.move = function (code) {
-      if(code == KeyCode.LEFT) {
-        for(var i = 0; i < this.current.length; i++) {
-            this.current[i].shift();
-        }// --> end of turn right
-      } else if (code == KeyCode.RIGHT) {
-        for(var i = 0; i < this.current.length; i++) {
-            this.current[i].unshift(0);
-        }// --> end of turn right
-      }
-    };
-    this.log = function (msg) {
-      console.log(msg);
-    }
-   }
     
     /*入口*/
    (function(){
       /*开始游戏*/
-      var tetris = new Tetris(30, 30, 10, 10);
-      tetris.init();
-      //this.thread = setInterval(function() {
-        tetris.play();
-      //}, 500);
+      // var tetris = new Tetris(30, 30, 10, 10);
+     // tetris.init();
+
       // 监听键盘
       document.onkeyup = function(event) { 
-        tetris.move(event.keyCode);
+        //tetris.move(event.keyCode);
       }
     })();
   </script>
