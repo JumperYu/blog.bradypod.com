@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="/static/css/font-awesome.min.css" media="all">
   <link rel="stylesheet" href="/static/css/style.css" media="all">
   <link rel="stylesheet" href="/static/css/desert.css" media="all">
+  <link rel="stylesheet" href="/static/css/2015_02_01_style.css" media="all">
  </head>
 <body onload="prettyPrint()">
 	<div class="container">
@@ -47,12 +48,6 @@
           
       <div class="mycanvas">
             <canvas id="board">Your browser doesn't support Canvas</canvas>
-            <canvas id="timer"></canvas>
-            <canvas id="score"></canvas>
-            <canvas id="level"></canvas>
-            <canvas id="next-shape"></canvas>
-            <canvas id="high-score"></canvas>
-            <script src=""></script>
       </div>
          
         </div><!-- end col md 12 div -->
@@ -73,46 +68,269 @@
     </div><!-- end container -->
 
   <script type="text/javascript">
-    
-    var KeyCode = {
-      LEFT : 37,
-      UP : 38,
-      RIGHT : 39,
-      DOWN : 40
-    };
 
-    function Tetris(rows, cols, cellWidth, cellHeight) {
-      this.init = function () {
-        // 初始化
-        var _div = document.getElementById("myCanvas");
-        var _canvas = document.createElement("canvas");
-        _div.appendChild(_canvas);
-        _canvas.width = cols * cellWidth;
-        _canvas.height = rows * cellHeight;
-        _canvas.style.border = "1px solid black";
-        this.ctx = _canvas.getContext("2d");
-        this.shap = [[0,1,0,0], [1,1,1,0], [0,0,0,0], [0,0,0,0]];
-        for(var i = 0; i < this.shap.length; i++) {
-          for(var j = 0; j < this.shap[i].length; j++) {
-            if(this.shap[i][j] == 1) {
-              this.ctx.fillStyle = "rgb(255,165,0)";
-              this.ctx.fillRect(j * cellHeight, i * cellWidth, cellWidth, cellHeight);
+    /*入口*/
+   var Tetris = (function(){
+      var interval, 
+          gameOver = false,
+          cols = 15,
+          rows = 15,
+          blockSize = 32,
+          speed = 800;
+
+      // Tetris Constructor
+      function Tetris(){
+        this.board = new Board();
+        Keyboard.call(this);
+        this.init();
+      }
+      Tetris.prototype = {
+        init: function(){
+          this.eventHandlers();
+          this.board.init();
+        },
+        newGame: function(){
+          var self = this;
+          var sprite = this.board.shape.block.sprite.image;
+          sprite.onload = function(){
+            self.board.init();
+            interval = setInterval(function(){
+              self.board.tick();
+            }, speed);
+          };
+        },
+        endGame: function(){
+          clearInterval(interval);
+          clearInterval(this.timer.timerId);
+          alert("Game Over");
+        }
+      };
+
+      // main board
+      function Board(){
+        var grid;
+        this.cols = cols || 13;
+        this.rows = rows || 16;
+        this.blockSize = blockSize || 32;
+        this.canvas = new Canvas('board', cols*blockSize, rows*blockSize);
+        this.ctx  = this.canvas.ctx;
+        this.shape = new Shape();
+        this.list = [];
+      }
+      Board.prototype = {
+        init: function(){
+          this.initGrid();
+          this.drawGrid();
+          this.shape.new().draw(this.ctx);
+        },
+        initGrid: function(){
+          for (var y=0; y < this.rows; y++){
+            this.list[y] = [];
+            for (var x=0; x < this.cols; x++){
+              this.list[y][x] = 0;
             }
           }
-        }// --> end of draw this.shap
-      };//-- end init canvas
-    };
-    
-    /*入口*/
-   (function(){
-      /*开始游戏*/
-      // var tetris = new Tetris(30, 30, 10, 10);
-     // tetris.init();
+        },
+        drawGrid: function(){
+          this.ctx.strokeStyle = 'rgba(140,140,140,.8)';
+          this.ctx.lineWidth = 1;
+          
+          for(var x=0; x <= this.rows; x++){
+            this.ctx.moveTo(0, x * this.blockSize);
+            this.ctx.lineTo(this.canvas.width, x * this.blockSize);
+            this.ctx.stroke();
+          }
+          for(var y=0; y <= this.cols; y++){
+            this.ctx.moveTo(y * this.blockSize, 0);
+            this.ctx.lineTo(y * this.blockSize, this.canvas.height);
+            this.ctx.stroke();
+          }
+        },
+        addShapeToBoard: function(){
+          console.log(this.shape.layout);
+        }
+      };//-> end board prototype
+
+      // Shape Constructor
+      function Shape(){
+        this.block = new Block();
+        this.layout;
+        this.blockType;
+        this.currentX = 0;
+        this.currentY = 0;
+        this.layouts = [
+          [
+            [ 0, 1, 0 ],
+            [ 1, 1, 1 ]
+          ],[
+            [ 0, 0, 1 ],
+            [ 1, 1, 1 ]
+          ],[
+            [ 1, 0, 0 ],
+            [ 1, 1, 1 ]
+          ],[
+            [ 1, 1, 0 ],
+            [ 0, 1, 1 ]
+          ],[
+            [ 0, 1, 1 ],
+            [ 1, 1, 0 ]
+          ],[
+            [ 1, 1, 1, 1 ]
+          ],[
+            [ 1, 1 ],
+            [ 1, 1 ]
+          ]
+        ];
+      }
+      Shape.prototype = {
+        random: function(){
+          var layout = this.layouts[ Math.floor(Math.random() * this.layouts.length) ];
+          this.blockType = this.block.random();
+
+          for (var y=0; y < layout.length; y++){
+            for (var x=0; x < layout[0].length; x++){
+              if (layout[y][x]) layout[y][x] = this.blockType;
+            }
+          }
+          this.layout = layout;
+        },
+        defaultXY: function(){
+          this.currentX = Math.floor((cols - this.layout[0].length)/2);
+          this.currentY = 0;
+          },
+        new: function(){
+          this.random();
+          this.defaultXY();
+          return this;
+        },
+        fixCurrentXY: function(){
+          if (this.currentX < 0) this.currentX = 0;
+          if (this.currentY < 0) this.currentY = 0;
+          if (this.currentX + this.layout[0].length > cols) this.currentX = cols - this.layout[0].length;
+          if (this.currentY + this.layout.length    > rows) this.currentY = rows - this.layout.length;
+        },
+        rotate: function(){
+          var newLayout = [];
+          for (var y=0; y < this.layout[0].length; y++){
+            newLayout[y] = [];
+            for (var x=0; x < this.layout.length; x++){
+              newLayout[y][x] = this.layout[this.layout.length - 1 - x][y];
+            }
+          }
+          this.layout = newLayout;
+          this.fixCurrentXY();
+        },
+        draw: function(context){                                                                                                                                                                           
+          try {
+            for (var y=0; y < this.layout.length; y++){
+              for (var x=0; x < this.layout[y].length; x++){
+                if (this.layout[y][x]) this.block.draw(context, x + this.currentX, y + this.currentY, this.blockType);
+              }
+            }
+          } catch(e){
+            console.log("Error: can't draw the shape.");
+          }
+        }
+      };
+
+      // Single Tetris Block
+      function Block(){
+        this.sprite = new SpriteLoader();
+        this.image = this.sprite.image;
+        this.size  = this.sprite.imageSize;
+        this.total = this.sprite.total;
+      }
+      Block.prototype = {
+        random: function(){
+          return Math.floor( Math.random() * this.total ) + 1;
+        },
+        draw: function(context, x, y, blockType){
+          var blockType = blockType || this.random();
+          var s = this.size;
+          context.drawImage(this.image, (blockType-1)*s, 0, s, s, s*x, s*y, s, s);
+        }
+      };
+
+      // Sprite Constructor - Loading the sprite image
+      function SpriteLoader(src){
+        var path = '/static/images/';
+        this.image = new Image();
+        this.image.src = path + ((src) ? src : 'blocks.png');
+        this.imageSize = blockSize || 32;
+        this.total = 7;
+      }
+
+      // canvas construct
+      function Canvas(id, width, height){
+        this.id = id;
+        this.el = document.getElementById(this.id);
+        this.ctx = this.el.getContext('2d');
+        this.width  = width  || window.innerWidth  || documentElement.clientWidth;
+        this.height = height || window.innerHeight || documentElement.clientHeight;
+        this.setSize();
+      }
+      Canvas.prototype = {
+        setSize: function(){
+          this.el.width  = this.width;
+          this.el.height = this.height;
+        },
+        clear: function(fromX, fromY, toX, toY){
+          var fromX = fromX || 0;
+          var fromY = fromY || 0;
+          var toX = toX || this.width;
+          var toY = toY || this.height;
+          this.ctx.clearRect(fromX, fromY, toX, toY);
+        },
+        drawHeader: function(text, color){
+          this.ctx.fillStyle = color;
+          this.ctx.fillRect(0, 0, this.width, 50);
+          this.ctx.font = "25px Arial";
+          this.ctx.fillStyle = 'black';
+          this.ctx.textAlign = 'center';
+          this.ctx.fillText(text, this.width/2, 34);
+        },
+        drawText: function(text){
+          this.clear(0, 50);
+          this.ctx.font = "25px Arial";
+          this.ctx.fillStyle = 'white';
+          this.ctx.textAlign = 'center';
+          this.ctx.fillText(text, this.width/2, 84);
+        }
+      };
 
       // 监听键盘
-      document.onkeyup = function(event) { 
-        //tetris.move(event.keyCode);
+      // Keypress Constructor
+      function Keyboard(){
+        var self = this;
+        var keys = {
+          38: 'top',
+          39: 'right',
+          40: 'down',
+          37: 'left'
+        };
+        this.eventHandlers = function(){
+          document.addEventListener('keydown', this.keyPressEvent, true);
+        };
+        this.keyPressEvent = function(event){
+          if (keys[event.keyCode])
+            self.keyPress( keys[event.keyCode] );
+        };
+        this.keyPress = function(key){
+          var refresh = false;
+
+          switch(key){
+            case 'top':
+              this.board.shape.rotate();
+          }
+            
+          if (refresh){
+              this.board.refresh();
+              this.board.shape.draw(this.board.ctx);
+          }
+        };
       }
+
+      return new Tetris();
     })();
   </script>
 
