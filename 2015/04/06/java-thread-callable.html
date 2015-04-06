@@ -38,75 +38,73 @@
 		<div class="row">
         <div class="col-md-12">
           <article class="news-item">
-  		    <h2>java concurrent包 - 线程池<small> 2015.03.11</small></h2>
+  		    <h2>java concurrent包 - Callable<small> 2015.04.06</small></h2>
   		    </aritcle>
 <div>
-<p>
- java.util.concurrent工具包可以简化并发程序的开发, 减少竞争条件和死锁线程，为我们提供了更实用的并发程序模型。
-</p>
-<p>
-<b>1) newFixedThreadPool（固定大小线程池）</b><br/>
-创建一个可重用固定线程集合的线程池，以共享的无界队列方式来运行这些线程（只要有请求过来，就会在一个队列里等待执行）。如果在当前线程执行期间由于失败而导致线程终止，那么一个新线程将代替继续执行。 
-</p>
-<p>
-<b>2) newCachedThreadPool（无界线程池，可以进行自动线程回收）</b><br/>
-创建一个可根据需要创建新线程的线程池，但是在以前构造的线程可用时将重用它们。对于执行很多短期异步任务的程序而言，这些线程池通常可提高程序性能。调用 execute 将重用以前构造的线程（如果线程可用）。如果现有线程没有可用的，则创建一个新线程并添加到池中。终止并从缓存中移除那些已有 60 秒钟未被使用的线程。因此，长时间保持空闲的线程池不会使用任何资源。注意，可以使用 ThreadPoolExecutor 构造方法创建具有类似属性但细节不同（例如超时参数）的线程池。
-</p>
-<p>
-<b>3) newSingleThreadExecutor（单个后台线程）</b><br/>
-创建一个使用单个 worker 线程的Executor，以无界队列方式来运行该线程。（注意，如果因为在关闭前的执行期间出现失败而终止了此单个线程，那么如果需要，一个新线程将代替它执行 后续的任务）。可保证顺序地执行各个任务，并且在任意给定的时间不会有多个线程是活动的。与其他等效的 newFixedThreadPool(1) 不同，可保证无需重新配置此方法所返回的执行程序即可使用其他的线程。
-这些方法返回的都是ExecutorService对象，这个对象可以理解为就是一个线程池。
-这个线程池的功能还是比较完善的。可以提交任务submit()可以结束线程池shutdown()。 
-</p>
-<h4>1) newFixedThreadPool, 可指定同一时刻线程池中可运行的线程数；</h4>
+<p>分别使用Executor、Future、Callable</p>
 <pre class="prettyprint">
-public class MyExecutor implements Runnable {
+import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-  private int index;
+/**
+ * 斐波那契数列，又称黄金分割数列，指的是这样一个数列：0、1、1、2、3、5、8、13、21、……在数学上，
+ * 斐波纳契数列以如下被以递归的方法定义：F（0）=0，F（1）=1，F（n）=F(n-1)+F(n-2)（n≥2，n∈N*）
+ * 在现代物理、准晶体结构、化学等领域，斐波纳契数列都有直接的应用，为此，美国数学会从1963起出版了以
+ * 《斐波纳契数列季刊》为名的一份数学杂志，用于专门刊载这方面的研究成果。
+ *
+ * @author zengxm
+ * @date 2015年4月6日
+ *
+ */
+public class Fibonacci implements Callable<Long> {
 
-  public MyExecutor(int i) {
-    this.index = i;
+  public static void main(String args[]) throws Exception {
+    ExecutorService executorService = Executors.newCachedThreadPool();
+    ArrayList<Future<Long>> results = new ArrayList<Future<Long>>();
+    for (int i = 1; i < 40; i++) {
+      results.add(executorService.submit(new Fibonacci(i)));
+    }
+    for (Future<Long> future : results) {
+      try {
+        while(!future.isDone()){
+          // do some thing
+        }
+        System.out.println(future.get());
+      } catch (InterruptedException | ExecutionException e) {
+        e.printStackTrace();
+      }
+    }
+    executorService.shutdown();
   }
 
-  public void run() {
-    try {
-      System.out.println(String.format("[ %s ] echo index:%d", Thread
-          .currentThread().getName(), index));
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+  public Fibonacci(long n) {
+    this.n = n;
   }
 
-  public static void main(String args[]) {
-    ExecutorService service = Executors.newFixedThreadPool(2);
-    for (int i = 0; i < 10; i++) {
-      service.execute(new Thread(new MyExecutor(i)));
-    }
-    System.out.println("submit finish");
-    service.shutdown();
+  private long n = 0;
+
+  public static long fibonacci(long n) {
+    if (n <= 1)
+      return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+  }
+
+  @Override
+  public Long call() throws Exception {
+    return fibonacci(n);
   }
 }/*
-submit finish
-[ pool-1-thread-1 ] echo index:0
-[ pool-1-thread-2 ] echo index:1
-[ pool-1-thread-1 ] echo index:2
-[ pool-1-thread-2 ] echo index:3
-[ pool-1-thread-1 ] echo index:4
-[ pool-1-thread-2 ] echo index:5
-[ pool-1-thread-1 ] echo index:6
-[ pool-1-thread-2 ] echo index:7
-[ pool-1-thread-1 ] echo index:8
-[ pool-1-thread-2 ] echo index:9
-*///:~ console result example
-</pre>
-
-<p>2) newCachedThreadPool</p>
-<pre class="prettyprint">
-
-</pre>
-<p>3) newSingleThreadExecutor</p>
-<pre class="prettyprint">
-
+1
+1
+2
+3
+5
+... 
+*///~:输出结果
 </pre>
 </div><!-- end pretty div -->
 
